@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/5d45b621-4b53-493c-9032-d01d76e19a66.jpeg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2d4f'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='30' fill='%23d4b07a' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b2d4f'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='30' fill='%23d4b07a' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E" />
   <meta property="og:title" content="Casa das Árvores | Ilha Armona, Algarve" />
   <meta property="og:description" content="Unieke vakantiewoning op het autovrije eiland Armona. 3 slaapkamers, 100m van het strand, Ria Formosa." />
   <meta property="og:image" content="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/5d45b621-4b53-493c-9032-d01d76e19a66.jpeg" />
@@ -43,6 +45,54 @@
       color: var(--text);
       font-weight: 300;
     }
+
+    ::selection { background: var(--gold); color: white; }
+    ::-moz-selection { background: var(--gold); color: white; }
+
+    /* custom scrollbar (WebKit) */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 5px; border: 2px solid var(--cream); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+
+    /* scroll progress bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(to right, var(--gold), var(--gold-light));
+      z-index: 250;
+      transition: width 0.1s ease-out;
+    }
+
+    /* section ornament */
+    .section-ornament {
+      width: 60px; height: 14px;
+      margin: 1rem 0 1.5rem;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+    .amenities-inner .section-ornament,
+    .calendar-inner .section-ornament { color: var(--gold-light); }
+
+    /* giant decorative section number */
+    .section-num {
+      position: absolute;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(6rem, 14vw, 13rem);
+      font-weight: 400;
+      line-height: 1;
+      color: var(--navy);
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 0;
+      top: -2.5rem;
+      left: -1rem;
+    }
+    .amenities-inner .section-num,
+    .calendar-inner .section-num { color: #ffffff; opacity: 0.06; }
+    .section-num-wrap { position: relative; }
 
     /* ── NAVIGATION ── */
     nav {
@@ -86,7 +136,20 @@
       text-transform: uppercase;
       transition: color 0.2s;
       cursor: pointer;
+      position: relative;
     }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -5px;
+      width: 100%; height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: scaleX(1); }
 
     .nav-links a:hover,
     .nav-links a.active { color: var(--gold); }
@@ -205,8 +268,28 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to bottom, rgba(17,30,53,0.35) 0%, transparent 22%),
-        linear-gradient(to top, rgba(17,30,53,0.88) 0%, rgba(17,30,53,0.4) 40%, transparent 70%);
+        linear-gradient(to bottom, rgba(17,30,53,0.6) 0%, rgba(17,30,53,0.2) 30%, transparent 55%),
+        linear-gradient(to top, rgba(17,30,53,0.95) 0%, rgba(17,30,53,0.65) 35%, rgba(17,30,53,0.3) 60%, transparent 80%),
+        linear-gradient(to right, rgba(17,30,53,0.55) 0%, rgba(17,30,53,0.15) 50%, transparent 75%);
+    }
+
+    /* cinematic grain */
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* elegant gold frame */
+    .hero-frame {
+      position: absolute;
+      inset: 24px;
+      z-index: 2;
+      border: 1px solid rgba(212,176,122,0.35);
+      pointer-events: none;
     }
 
     .hero-content {
@@ -229,7 +312,14 @@
       text-transform: uppercase;
       color: var(--gold-light);
       margin-bottom: 1.2rem;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.6);
     }
+    .hero-tag .char {
+      display: inline-block;
+      opacity: 0;
+      animation: charIn 0.5s ease forwards;
+    }
+    @keyframes charIn { to { opacity: 1; } }
 
     .hero-title {
       font-family: 'Cormorant Garamond', serif;
@@ -238,6 +328,7 @@
       line-height: 1.0;
       color: white;
       margin-bottom: 1.4rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5), 0 4px 40px rgba(0,0,0,0.3);
     }
 
     .hero-title em {
@@ -245,13 +336,27 @@
       color: var(--gold-light);
     }
 
+    /* word-by-word reveal */
+    .hero-title .word-mask {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+    }
+    .hero-title .word-mask > span {
+      display: inline-block;
+      transform: translateY(110%);
+      animation: wordRise 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes wordRise { to { transform: translateY(0); } }
+
     .hero-subtitle {
       font-size: 0.9rem;
-      color: rgba(255,255,255,0.72);
+      color: rgba(255,255,255,0.88);
       letter-spacing: 0.04em;
       margin-bottom: 2.8rem;
       max-width: 460px;
       line-height: 1.8;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
     }
 
     .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
@@ -263,16 +368,29 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       text-decoration: none;
-      transition: all 0.3s;
+      transition: transform 0.25s ease, background 0.3s, border-color 0.3s, color 0.3s;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
+    /* shine sweep */
+    .hero-cta.primary::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -120%;
+      width: 60%; height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+    .hero-cta.primary:hover::after { left: 130%; }
 
     .hero-cta.primary {
       background: var(--gold);
       border: 1px solid var(--gold);
       color: white;
     }
-    .hero-cta.primary:hover { background: var(--gold-light); border-color: var(--gold-light); transform: translateY(-2px); }
+    .hero-cta.primary:hover { background: var(--gold-light); border-color: var(--gold-light); }
 
     .hero-cta.secondary {
       background: transparent;
@@ -387,6 +505,17 @@
       font-size: 0.92rem;
     }
 
+    /* drop cap on intro */
+    .has-dropcap p:first-of-type::first-letter {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.6rem;
+      font-weight: 400;
+      color: var(--gold);
+      float: left;
+      line-height: 0.8;
+      margin: 0.15rem 0.6rem 0 0;
+    }
+
     /* ── INTRO ── */
     .intro-grid {
       display: grid;
@@ -424,32 +553,10 @@
       top: 55%;
       left: 58%;
       transform: translate(-50%, -50%);
-      width: 100px;
-      height: 100px;
-      background: var(--navy);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      color: white;
-      text-align: center;
+      width: 110px;
+      height: 110px;
       z-index: 2;
-      box-shadow: 0 8px 32px rgba(27,45,79,0.35);
-    }
-
-    .intro-badge .badge-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.7rem;
-      line-height: 1;
-      color: var(--gold-light);
-    }
-
-    .intro-badge .badge-txt {
-      font-size: 0.52rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.7;
+      filter: drop-shadow(0 8px 24px rgba(27,45,79,0.4));
     }
 
     /* ── DIVIDER ── */
@@ -459,6 +566,11 @@
       background: linear-gradient(to right, transparent, var(--border-gold), transparent);
       margin: 0;
     }
+
+    /* wave dividers */
+    .wave-divider { display: block; width: 100%; height: 60px; line-height: 0; }
+    .wave-divider svg { width: 100%; height: 100%; display: block; }
+    @media (max-width: 768px) { .wave-divider { height: 36px; } }
 
     /* ── AMENITIES ── */
     .amenities-section {
@@ -689,14 +801,23 @@
       font-size: 0.78rem;
       cursor: default;
       color: rgba(255,255,255,0.6);
+      position: relative;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .cal-day.empty { pointer-events: none; }
 
     .cal-day.booked {
-      background: rgba(184,150,90,0.15);
-      color: rgba(255,255,255,0.25);
-      text-decoration: line-through;
+      color: rgba(255,255,255,0.22);
+    }
+    .cal-day.booked::after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(200, 70, 70, 0.75);
+      flex-shrink: 0;
     }
 
     .cal-day.available:hover {
@@ -729,7 +850,7 @@
     }
 
     .legend-dot.available { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); }
-    .legend-dot.booked { background: rgba(184,150,90,0.3); }
+    .legend-dot.booked { background: rgba(200,70,70,0.75); border-radius: 50%; }
 
     .cal-info { color: rgba(255,255,255,0.6); }
 
@@ -834,6 +955,23 @@
       line-height: 1.8;
       font-style: italic;
       margin-bottom: 1.4rem;
+    }
+    .review-text::first-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--navy);
+    }
+
+    /* parallax helper */
+    .parallax-img { will-change: transform; }
+
+    /* amenity icon draw on reveal */
+    .amenity-card.visible .amenity-icon svg {
+      animation: iconDraw 0.7s ease forwards;
+    }
+    @keyframes iconDraw {
+      from { opacity: 0; transform: translateY(6px) scale(0.9); }
+      to   { opacity: 1; transform: none; }
     }
 
     .review-author {
@@ -1003,6 +1141,8 @@
     /* ── FOOTER ── */
     footer {
       background: var(--navy-deep);
+      background-image:
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 22px);
       color: rgba(255,255,255,0.35);
       padding: 3rem 5rem;
       display: flex;
@@ -1010,6 +1150,13 @@
       align-items: center;
       font-size: 0.75rem;
       letter-spacing: 0.06em;
+      position: relative;
+    }
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border-gold), transparent);
     }
 
     .footer-logo {
@@ -1073,6 +1220,9 @@
     .lang-nl [data-lang="nl"],
     .lang-en [data-lang="en"],
     .lang-pt [data-lang="pt"] { display: revert; }
+    .lang-nl .book-btn[data-lang="nl"],
+    .lang-en .book-btn[data-lang="en"],
+    .lang-pt .book-btn[data-lang="pt"] { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 1.5rem; }
 
     /* ── STATS ICONS ── */
     .stat-icon { color: var(--gold-light); margin-bottom: 0.5rem; display: flex; justify-content: center; }
@@ -1110,13 +1260,10 @@
     /* ── GALLERY EDITORIAL ── */
     .gallery-editorial {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 280px 280px;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      grid-template-rows: 280px 240px;
       gap: 6px;
       margin-top: 4rem;
-    }
-    .gallery-editorial .gallery-item:first-child {
-      grid-row: 1 / 3;
     }
     .gallery-item-overlay {
       position: absolute; inset: 0;
@@ -1131,11 +1278,35 @@
     /* ── LIGHTBOX ── */
     .lightbox {
       display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.92);
+      background: rgba(0,0,0,0.94);
       align-items: center; justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.35s ease;
     }
     .lightbox.open { display: flex; }
-    .lightbox-img { max-width: 90vw; max-height: 80vh; object-fit: contain; display: block; }
+    .lightbox.shown { opacity: 1; }
+    .lightbox-img {
+      max-width: 88vw; max-height: 74vh; object-fit: contain; display: block;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .lightbox-img.swapping { opacity: 0; transform: scale(0.97); }
+
+    /* thumbnails strip */
+    .lightbox-thumbs {
+      display: flex; gap: 8px; margin-top: 1.2rem;
+      max-width: 90vw; overflow-x: auto; padding: 4px;
+    }
+    .lightbox-thumbs img {
+      width: 64px; height: 44px; object-fit: cover; cursor: pointer;
+      opacity: 0.45; border: 2px solid transparent; transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .lightbox-thumbs img.active { opacity: 1; border-color: var(--gold); }
+    .lightbox-thumbs img:hover { opacity: 0.85; }
+    .lightbox-counter {
+      color: rgba(255,255,255,0.6); font-size: 0.75rem; letter-spacing: 0.15em;
+    }
     .lightbox-close {
       position: absolute; top: 1.5rem; right: 1.5rem;
       background: none; border: none; color: white; cursor: pointer;
@@ -1153,9 +1324,10 @@
     .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.2); }
     .lightbox-prev svg, .lightbox-next svg { width: 28px; height: 28px; }
     .lightbox-caption {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.65); color: white;
-      padding: 1rem 2rem; font-size: 0.82rem; letter-spacing: 0.1em;
+      display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+      margin-top: 1rem;
+      color: white;
+      font-size: 0.82rem; letter-spacing: 0.1em;
       text-transform: uppercase; text-align: center;
     }
 
@@ -1174,7 +1346,16 @@
     .cal-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     .cal-day.past { opacity: 0.3; pointer-events: none; }
     .cal-day.booked { background: rgba(180,40,40,0.25); color: rgba(255,255,255,0.3); text-decoration: line-through; }
-    .cal-day.available:hover { background: rgba(40,140,80,0.15); cursor: default; }
+    .cal-day.available:hover { background: rgba(40,140,80,0.15); cursor: default; box-shadow: 0 0 12px rgba(184,150,90,0.4); }
+    .cal-grid.swap-in { animation: calSlide 0.4s ease; }
+    @keyframes calSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+    .cal-day.dayfade { opacity: 0; animation: dayFade 0.3s ease forwards; }
+    @keyframes dayFade { to { opacity: 1; } }
+    .cal-next-avail {
+      color: var(--gold-light); font-size: 0.82rem; letter-spacing: 0.04em;
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .cal-next-avail svg { width: 15px; height: 15px; stroke: var(--gold-light); }
     /* skeleton */
     .cal-skeleton { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
     .cal-skel-day {
@@ -1191,6 +1372,106 @@
       cursor: pointer; transition: all 0.2s;
     }
     .cal-retry-btn:hover { background: var(--gold); color: white; }
+
+    /* ── BOOKING WIZARD ── */
+    /* clickable calendar days */
+    .cal-day.available { cursor: pointer; }
+    .cal-day.available:hover { background: rgba(255,255,255,0.08); }
+    .cal-day.range-start, .cal-day.range-end {
+      background: var(--gold) !important;
+      color: #fff !important;
+      font-weight: 500;
+      border-radius: 4px;
+    }
+    .cal-day.in-range {
+      background: rgba(184,150,90,0.18);
+      color: #fff;
+    }
+    .cal-day.range-start { border-radius: 4px 0 0 4px; }
+    .cal-day.range-end { border-radius: 0 4px 4px 0; }
+    .cal-day.range-disabled { opacity: 0.28; pointer-events: none; }
+
+    .wizard { display: flex; flex-direction: column; gap: 1.4rem; }
+    .wizard-step-label {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold-light); margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .wizard-step-label .step-num {
+      width: 18px; height: 18px; border-radius: 50%; background: var(--gold);
+      color: #fff; font-size: 0.62rem; display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* guest picker */
+    .guest-rows { display: flex; flex-direction: column; gap: 0.9rem; }
+    .guest-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.1rem; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .guest-row-label { display: flex; flex-direction: column; gap: 0.15rem; }
+    .guest-row-label .g-title { font-size: 0.88rem; color: rgba(255,255,255,0.9); }
+    .guest-row-label .g-sub { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+    .guest-stepper { display: flex; align-items: center; gap: 0.9rem; }
+    .g-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: none; border: 1px solid var(--gold);
+      color: var(--gold-light); font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; line-height: 1; padding: 0;
+    }
+    .g-btn:hover:not(:disabled) { background: var(--gold); color: #fff; }
+    .g-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+    .g-count { min-width: 18px; text-align: center; font-size: 0.95rem; color: #fff; }
+
+    /* date summary */
+    .date-summary {
+      display: flex; gap: 1px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .date-cell {
+      flex: 1; padding: 0.85rem 1rem; background: rgba(255,255,255,0.04);
+    }
+    .date-cell .d-label { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+    .date-cell .d-value { font-size: 0.92rem; color: #fff; }
+    .date-cell .d-value.placeholder { color: rgba(255,255,255,0.3); }
+    .date-reset {
+      background: none; border: none; color: var(--gold-light);
+      font-size: 0.7rem; letter-spacing: 0.08em; cursor: pointer;
+      text-decoration: underline; margin-top: 0.5rem; padding: 0; align-self: flex-start;
+    }
+    .date-hint { font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.6; margin-top: 0.4rem; }
+    .date-hint.warn { color: #e0a96d; }
+
+    /* price card */
+    .price-card {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border-gold);
+      padding: 1.6rem; overflow: hidden;
+      max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0;
+      transition: max-height 0.45s ease, opacity 0.4s ease, padding 0.45s ease;
+    }
+    .price-card.show { max-height: 600px; opacity: 1; padding-top: 1.6rem; padding-bottom: 1.6rem; }
+    .price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+    .price-row .p-calc { border-bottom: 1px dotted rgba(255,255,255,0.25); cursor: help; }
+    .price-row.fee { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+    .price-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 1rem 0; }
+    .price-total { display: flex; justify-content: space-between; align-items: baseline; }
+    .price-total .pt-label { font-size: 0.78rem; letter-spacing: 0.06em; color: rgba(255,255,255,0.9); }
+    .price-total .pt-value { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; color: var(--gold-light); }
+    .price-disclaimer { font-size: 0.68rem; color: rgba(255,255,255,0.35); line-height: 1.6; margin-top: 1rem; font-style: italic; }
+    .wizard-book-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      width: 100%; padding: 1rem; margin-top: 1.2rem;
+      background: var(--gold); color: #fff; text-decoration: none;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: all 0.3s; border: none; cursor: pointer;
+    }
+    .wizard-book-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .wizard-book-btn.disabled { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.3); pointer-events: none; transform: none; }
+
+    @media (max-width: 768px) {
+      .guest-stepper { gap: 0.7rem; }
+    }
 
     /* ── AIRBNB LOGO ── */
     .airbnb-logo { width: 20px; height: 20px; flex-shrink: 0; }
@@ -1234,6 +1515,23 @@
     .contact-map { margin-top: 1.5rem; overflow: hidden; }
     .contact-map iframe { display: block; width: 100%; height: 240px; border: none; }
 
+    /* ── CONTACT FORM (full) ── */
+    .lang-nl .aanhef-select[data-lang="nl"],
+    .lang-en .aanhef-select[data-lang="en"],
+    .lang-pt .aanhef-select[data-lang="pt"] { display: block; width: 100%; }
+
+    .form-feedback {
+      font-size: 0.84rem;
+      line-height: 1.55;
+      padding: 0.8rem 1rem;
+      border-left: 3px solid transparent;
+      display: none;
+      margin-bottom: 0.5rem;
+    }
+    .form-feedback.error  { display: block; border-color: #c0392b; background: rgba(192,57,43,0.06); color: #c0392b; }
+    .form-feedback.success { display: block; border-color: var(--gold); background: rgba(184,150,90,0.08); color: var(--navy); }
+    .captcha-group input  { max-width: 120px; }
+
     /* ── BACK TO TOP ── */
     .back-to-top {
       position: fixed; bottom: 2rem; right: 2rem; z-index: 90;
@@ -1271,7 +1569,6 @@
       .island-photo { height: 280px; }
       .amenities-grid { grid-template-columns: 1fr; }
       .gallery-editorial { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .gallery-editorial .gallery-item:first-child { grid-row: auto; }
       .bedrooms-grid { grid-template-columns: 1fr; }
       .cal-dual { grid-template-columns: 1fr; }
       .calendar-layout { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -1290,6 +1587,8 @@
   </style>
 </head>
 <body class="lang-nl">
+
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
@@ -1340,9 +1639,11 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-frame"></div>
   <div class="hero-content">
-    <span class="hero-tag">Ilha Armona · Algarve · Portugal</span>
-    <h1 class="hero-title">Casa das<br><em>Árvores</em></h1>
+    <span class="hero-tag" id="heroTag">Ilha Armona · Algarve · Portugal</span>
+    <h1 class="hero-title"><span class="word-mask"><span>Casa</span></span> <span class="word-mask"><span style="animation-delay:0.12s">das</span></span><br><span class="word-mask"><em><span style="animation-delay:0.24s">Árvores</span></em></span></h1>
     <p class="hero-subtitle" data-lang="nl">Een unieke vakantiewoning op het autovrije eiland Armona, midden in het Ria Formosa natuurgebied. Rust, zee en ruimte voor het hele gezin.</p>
     <p class="hero-subtitle" data-lang="en">A unique holiday home on the car-free island of Armona, nestled within the Ria Formosa nature reserve. Tranquillity, sea and space for the whole family.</p>
     <p class="hero-subtitle" data-lang="pt">Uma casa de férias única na ilha sem automóveis de Armona, no coração da Reserva Natural da Ria Formosa. Paz, mar e espaço para toda a família.</p>
@@ -1405,23 +1706,49 @@
   <div class="section">
     <div class="intro-grid">
       <div class="intro-image-stack">
-        <img class="img-main" src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/cf1a2966-85a7-4b53-8f0d-2b8e6bc12037.jpeg" alt="Casa das Árvores" />
+        <img class="img-main parallax-img" data-speed="0.04" src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/cf1a2966-85a7-4b53-8f0d-2b8e6bc12037.jpeg" alt="Casa das Árvores" />
         <img class="img-accent" src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/25538ba9-5912-4a55-b9d4-9b39a1eb5acd.jpeg" alt="Terras" />
         <div class="intro-badge">
-          <span class="badge-num">9</span>
-          <span class="badge-txt" data-lang="nl">recensies</span>
-          <span class="badge-txt" data-lang="en">reviews</span>
-          <span class="badge-txt" data-lang="pt">avaliações</span>
+          <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+            <!-- background circle -->
+            <circle cx="55" cy="55" r="54" fill="#1b2d4f" />
+            <!-- outer ring -->
+            <circle cx="55" cy="55" r="50" fill="none" stroke="#b8965a" stroke-width="1" stroke-dasharray="3 4" />
+            <!-- inner ring -->
+            <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(184,150,90,0.35)" stroke-width="0.5" />
+            <!-- curved text top: ILHA ARMONA -->
+            <path id="topArc" d="M 16,55 A 39,39 0 0,1 94,55" fill="none" />
+            <text font-family="Raleway,sans-serif" font-size="7.5" letter-spacing="3" fill="#d4b07a" text-anchor="middle">
+              <textPath href="#topArc" startOffset="50%">ILHA ARMONA</textPath>
+            </text>
+            <!-- curved text bottom: ALGARVE · PORTUGAL -->
+            <path id="botArc" d="M 16,57 A 39,39 0 0,0 94,57" fill="none" />
+            <text font-family="Raleway,sans-serif" font-size="6.5" letter-spacing="2" fill="rgba(212,176,122,0.65)" text-anchor="middle">
+              <textPath href="#botArc" startOffset="50%">ALGARVE · PORTUGAL</textPath>
+            </text>
+            <!-- sun icon center -->
+            <circle cx="55" cy="51" r="7" fill="none" stroke="#b8965a" stroke-width="1.2" />
+            <line x1="55" y1="38" x2="55" y2="41" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="55" y1="61" x2="55" y2="64" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="42" y1="51" x2="45" y2="51" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="65" y1="51" x2="68" y2="51" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="46.1" y1="42.1" x2="48.2" y2="44.2" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="61.8" y1="57.8" x2="63.9" y2="59.9" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="63.9" y1="42.1" x2="61.8" y2="44.2" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="48.2" y1="57.8" x2="46.1" y2="59.9" stroke="#b8965a" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
         </div>
       </div>
-      <div>
-        <p class="section-tag" data-lang="nl">Over de woning</p>
-        <p class="section-tag" data-lang="en">About the home</p>
-        <p class="section-tag" data-lang="pt">Sobre a casa</p>
-        <h2 class="section-title" data-lang="nl">Een oase van rust in de Algarve</h2>
-        <h2 class="section-title" data-lang="en">A tranquil retreat in the Algarve</h2>
-        <h2 class="section-title" data-lang="pt">Um refúgio de paz no Algarve</h2>
-        <div class="section-body">
+      <div class="section-num-wrap">
+        <span class="section-num">01</span>
+        <p class="section-tag reveal" data-lang="nl">Over de woning</p>
+        <p class="section-tag reveal" data-lang="en">About the home</p>
+        <p class="section-tag reveal" data-lang="pt">Sobre a casa</p>
+        <h2 class="section-title reveal" data-lang="nl">Een oase van rust in de Algarve</h2>
+        <h2 class="section-title reveal" data-lang="en">A tranquil retreat in the Algarve</h2>
+        <h2 class="section-title reveal" data-lang="pt">Um refúgio de paz no Algarve</h2>
+        <svg class="section-ornament" viewBox="0 0 60 14"><path d="M0 7 H22 M38 7 H60 M30 2 L34 7 L30 12 L26 7 Z" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        <div class="section-body has-dropcap">
           <p data-lang="nl">Casa das Árvores ligt op het autovrije eiland Armona, dat deel uitmaakt van het Ria Formosa natuurgebied aan de oostkust van de Algarve. Het eiland is alleen bereikbaar per veerboot vanuit Olhão (±20 minuten) of met een watertaxi. Olhão zelf ligt op slechts 20 minuten rijden van vliegveld Faro.<br><br>Vanuit de aanlegsteiger is het een aangenaam wandeling van 15 minuten over het hoofdpad naar de woning. Op nog geen 100 meter van het huis begint een houten loopbrug door de duinen, die rechtstreeks naar het strand leidt.</p>
           <p data-lang="en">Casa das Árvores is located on the car-free island of Armona, part of the Ria Formosa nature reserve on the eastern coast of the Algarve. The island is only accessible by ferry from Olhão (approx. 20 minutes) or by water taxi. Olhão itself is just 20 minutes from Faro Airport.<br><br>From the ferry pier it is a pleasant 15-minute walk along the main path to the house. Less than 100 metres away, a wooden boardwalk winds through the dunes directly to the beach.</p>
           <p data-lang="pt">A Casa das Árvores situa-se na ilha sem automóveis de Armona, parte da Reserva Natural da Ria Formosa na costa oriental do Algarve. A ilha só é acessível de barco a partir de Olhão (aprox. 20 minutos) ou de táxi aquático. Olhão fica a apenas 20 minutos do Aeroporto de Faro.<br><br>Do cais da balsa são 15 minutos de caminhada pelo caminho principal até à casa. A menos de 100 metros, uma passadeira de madeira atravessa as dunas diretamente até à praia.</p>
@@ -1445,14 +1772,14 @@
     <p class="section-tag reveal" data-lang="nl">Het eiland</p>
     <p class="section-tag reveal" data-lang="en">The island</p>
     <p class="section-tag reveal" data-lang="pt">A ilha</p>
-    <h2 class="section-title reveal" data-lang="nl">Armona — een eiland buiten de tijd</h2>
-    <h2 class="section-title reveal" data-lang="en">Armona — an island beyond time</h2>
-    <h2 class="section-title reveal" data-lang="pt">Armona — uma ilha fora do tempo</h2>
+    <h2 class="section-title reveal" data-lang="nl">Armona: een eiland buiten de tijd</h2>
+    <h2 class="section-title reveal" data-lang="en">Armona: an island beyond time</h2>
+    <h2 class="section-title reveal" data-lang="pt">Armona: uma ilha fora do tempo</h2>
     <div class="island-grid">
       <div>
-        <p class="section-body reveal" data-lang="nl">Geen auto's, geen lawaai — alleen natuur, zee en de stilte van het Ria Formosa reservaat. Armona is een van de mooiste en minst bekende eilanden van de Algarve, waar kinderen vrij kunnen spelen en volwassenen echt tot rust komen.</p>
-        <p class="section-body reveal" data-lang="en">No cars, no noise — just nature, sea and the silence of the Ria Formosa reserve. Armona is one of the most beautiful and least-known islands of the Algarve, where children can roam freely and adults truly unwind.</p>
-        <p class="section-body reveal" data-lang="pt">Sem carros, sem barulho — apenas natureza, mar e o silêncio da Reserva Natural da Ria Formosa. Armona é uma das ilhas mais belas e menos conhecidas do Algarve, onde as crianças brincam livremente e os adultos descansam de verdade.</p>
+        <p class="section-body reveal" data-lang="nl">Geen auto's, geen lawaai. Alleen natuur, zee en de stilte van het Ria Formosa reservaat. Armona is een van de mooiste en minst bekende eilanden van de Algarve, waar kinderen vrij kunnen spelen en volwassenen echt tot rust komen.</p>
+        <p class="section-body reveal" data-lang="en">No cars, no noise. Just nature, sea and the silence of the Ria Formosa reserve. Armona is one of the most beautiful and least-known islands of the Algarve, where children can roam freely and adults truly unwind.</p>
+        <p class="section-body reveal" data-lang="pt">Sem carros, sem barulho. Apenas natureza, mar e o silêncio da Reserva Natural da Ria Formosa. Armona é uma das ilhas mais belas e menos conhecidas do Algarve, onde as crianças brincam livremente e os adultos descansam de verdade.</p>
         <div class="island-icon-grid" style="margin-top:2rem;">
           <div class="island-feature reveal"><i data-lucide="waves"></i><span data-lang="nl">Oceaanstrand op loopafstand</span><span data-lang="en">Ocean beach within walking distance</span><span data-lang="pt">Praia oceânica a pé</span></div>
           <div class="island-feature reveal"><i data-lucide="bird"></i><span data-lang="nl">Ria Formosa natuurgebied</span><span data-lang="en">Ria Formosa nature reserve</span><span data-lang="pt">Reserva natural Ria Formosa</span></div>
@@ -1463,17 +1790,20 @@
         </div>
       </div>
       <div class="island-photo reveal">
-        <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/7142ca27-9389-4ee4-8870-e3baa5dedba2.jpeg" alt="Ilha Armona" loading="lazy" />
+        <img class="parallax-img" data-speed="0.05" src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/7142ca27-9389-4ee4-8870-e3baa5dedba2.jpeg" alt="Ilha Armona" loading="lazy" />
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="wave-divider" style="background:var(--navy);" aria-hidden="true">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="var(--cream)" d="M0,0 L1440,0 L1440,30 C1080,60 720,5 360,35 C240,45 120,30 0,40 Z"/></svg>
+</div>
 
 <!-- AMENITIES -->
 <section id="voorzieningen" class="amenities-section">
-  <div class="amenities-inner">
+  <div class="amenities-inner section-num-wrap">
+    <span class="section-num">02</span>
     <p class="section-tag" data-lang="nl">Wat wij bieden</p>
     <p class="section-tag" data-lang="en">What we offer</p>
     <p class="section-tag" data-lang="pt">O que oferecemos</p>
@@ -1554,23 +1884,28 @@
       <div class="amenity-card reveal">
         <div class="amenity-icon"><i data-lucide="flame"></i></div>
         <div class="amenity-title">BBQ</div>
-        <p class="amenity-text" data-lang="nl">BBQ op het terras — perfect voor zomeravonden.</p>
-        <p class="amenity-text" data-lang="en">BBQ on the terrace — perfect for summer evenings.</p>
-        <p class="amenity-text" data-lang="pt">Churrasqueira no terraço — perfeita para noites de verão.</p>
+        <p class="amenity-text" data-lang="nl">BBQ op het terras, perfect voor zomeravonden.</p>
+        <p class="amenity-text" data-lang="en">BBQ on the terrace, perfect for summer evenings.</p>
+        <p class="amenity-text" data-lang="pt">Churrasqueira no terraço, perfeita para noites de verão.</p>
       </div>
     </div>
   </div>
 </section>
 
+<div class="wave-divider" style="background:var(--navy);" aria-hidden="true">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="var(--warm-white)" d="M0,60 L1440,60 L1440,25 C1080,55 720,10 360,30 C240,38 120,25 0,32 Z"/></svg>
+</div>
+
 <!-- GALLERY -->
 <section id="galerij">
-  <div class="section">
-    <p class="section-tag" data-lang="nl">De woning in beeld</p>
-    <p class="section-tag" data-lang="en">In pictures</p>
-    <p class="section-tag" data-lang="pt">Em imagens</p>
-    <h2 class="section-title" data-lang="nl">Sfeer en ruimte</h2>
-    <h2 class="section-title" data-lang="en">Atmosphere &amp; space</h2>
-    <h2 class="section-title" data-lang="pt">Ambiente e espaço</h2>
+  <div class="section section-num-wrap">
+    <span class="section-num">03</span>
+    <p class="section-tag reveal" data-lang="nl">De woning in beeld</p>
+    <p class="section-tag reveal" data-lang="en">In pictures</p>
+    <p class="section-tag reveal" data-lang="pt">Em imagens</p>
+    <h2 class="section-title reveal" data-lang="nl">Sfeer en ruimte</h2>
+    <h2 class="section-title reveal" data-lang="en">Atmosphere &amp; space</h2>
+    <h2 class="section-title reveal" data-lang="pt">Ambiente e espaço</h2>
     <div class="gallery-editorial">
       <div class="gallery-item" onclick="openLightbox(0)" style="cursor:pointer;position:relative;">
         <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/5d45b621-4b53-493c-9032-d01d76e19a66.jpeg" alt="Buitenkant" loading="lazy" />
@@ -1611,7 +1946,8 @@
   <button class="lightbox-prev" onclick="lightboxNav(-1)" aria-label="Vorige"><i data-lucide="chevron-left"></i></button>
   <img class="lightbox-img" id="lightboxImg" src="" alt="" />
   <button class="lightbox-next" onclick="lightboxNav(1)" aria-label="Volgende"><i data-lucide="chevron-right"></i></button>
-  <div class="lightbox-caption" id="lightboxCaption"></div>
+  <div class="lightbox-caption"><span id="lightboxCounter" class="lightbox-counter"></span><span id="lightboxCaption"></span></div>
+  <div class="lightbox-thumbs" id="lightboxThumbs"></div>
 </div>
 
 <!-- BEDROOMS -->
@@ -1676,13 +2012,14 @@
 
 <!-- CALENDAR -->
 <section id="beschikbaarheid" class="calendar-section">
-  <div class="calendar-inner">
-    <p class="section-tag" data-lang="nl">Planning</p>
-    <p class="section-tag" data-lang="en">Planning</p>
-    <p class="section-tag" data-lang="pt">Planeamento</p>
-    <h2 class="section-title" data-lang="nl">Beschikbaarheid</h2>
-    <h2 class="section-title" data-lang="en">Availability</h2>
-    <h2 class="section-title" data-lang="pt">Disponibilidade</h2>
+  <div class="calendar-inner section-num-wrap">
+    <span class="section-num">04</span>
+    <p class="section-tag reveal" data-lang="nl">Planning</p>
+    <p class="section-tag reveal" data-lang="en">Planning</p>
+    <p class="section-tag reveal" data-lang="pt">Planeamento</p>
+    <h2 class="section-title reveal" data-lang="nl">Beschikbaarheid</h2>
+    <h2 class="section-title reveal" data-lang="en">Availability</h2>
+    <h2 class="section-title reveal" data-lang="pt">Disponibilidade</h2>
     <div class="calendar-layout">
       <div>
         <div class="cal-dual" id="calDual">
@@ -1720,44 +2057,129 @@
         <p class="cal-loading" id="cal-status" style="margin-top:1rem;"></p>
       </div>
       <div class="cal-info">
-        <p data-lang="nl">De kalender is rechtstreeks gekoppeld aan de Airbnb-agenda. Bezette dagen zijn up-to-date vanuit de actuele reserveringen op Airbnb.</p>
-        <p data-lang="en">The calendar is directly linked to the Airbnb agenda. Booked dates are kept up to date from current reservations on Airbnb.</p>
-        <p data-lang="pt">O calendário está ligado diretamente à agenda do Airbnb. As datas reservadas são atualizadas em tempo real.</p>
-        <br/>
-        <p data-lang="nl"><i data-lucide="clock" style="width:14px;height:14px;stroke:var(--gold-light);vertical-align:middle;margin-right:4px;"></i><strong>Aankomst:</strong> vanaf 15:00 &nbsp;·&nbsp; <strong>Vertrek:</strong> voor 10:00 &nbsp;·&nbsp; <strong>Max.:</strong> 6 personen</p>
-        <p data-lang="en"><i data-lucide="clock" style="width:14px;height:14px;stroke:var(--gold-light);vertical-align:middle;margin-right:4px;"></i><strong>Check-in:</strong> from 15:00 &nbsp;·&nbsp; <strong>Check-out:</strong> before 10:00 &nbsp;·&nbsp; <strong>Max.:</strong> 6 persons</p>
-        <p data-lang="pt"><i data-lucide="clock" style="width:14px;height:14px;stroke:var(--gold-light);vertical-align:middle;margin-right:4px;"></i><strong>Check-in:</strong> 15:00 &nbsp;·&nbsp; <strong>Check-out:</strong> 10:00 &nbsp;·&nbsp; <strong>Máx.:</strong> 6 pessoas</p>
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="book-btn" style="display:inline-flex;align-items:center;gap:0.6rem;margin-top:1.5rem;" data-lang="nl">
-          <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-          Boek via Airbnb
-        </a>
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="book-btn" style="display:inline-flex;align-items:center;gap:0.6rem;margin-top:1.5rem;" data-lang="en">
-          <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-          Book via Airbnb
-        </a>
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="book-btn" style="display:inline-flex;align-items:center;gap:0.6rem;margin-top:1.5rem;" data-lang="pt">
-          <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-          Reservar via Airbnb
-        </a>
-        <div style="margin-top:0.8rem;">
-          <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);" data-lang="nl">Bekijk actuele prijs op Airbnb →</a>
-          <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);" data-lang="en">View current price on Airbnb →</a>
-          <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);" data-lang="pt">Ver preço atual no Airbnb →</a>
+        <div class="wizard">
+          <!-- STEP 1: guests -->
+          <div>
+            <div class="wizard-step-label">
+              <span class="step-num">1</span>
+              <span data-lang="nl">Aantal gasten</span><span data-lang="en">Number of guests</span><span data-lang="pt">Número de hóspedes</span>
+            </div>
+            <div class="guest-rows">
+              <div class="guest-row">
+                <div class="guest-row-label">
+                  <span class="g-title"><span data-lang="nl">Volwassenen</span><span data-lang="en">Adults</span><span data-lang="pt">Adultos</span></span>
+                  <span class="g-sub"><span data-lang="nl">13 jaar en ouder</span><span data-lang="en">Age 13+</span><span data-lang="pt">13 anos ou mais</span></span>
+                </div>
+                <div class="guest-stepper">
+                  <button class="g-btn" id="adultsMinus" onclick="changeGuests('adults',-1)" aria-label="−">−</button>
+                  <span class="g-count" id="adultsCount">2</span>
+                  <button class="g-btn" id="adultsPlus" onclick="changeGuests('adults',1)" aria-label="+">+</button>
+                </div>
+              </div>
+              <div class="guest-row">
+                <div class="guest-row-label">
+                  <span class="g-title"><span data-lang="nl">Kinderen</span><span data-lang="en">Children</span><span data-lang="pt">Crianças</span></span>
+                  <span class="g-sub"><span data-lang="nl">2 t/m 12 jaar</span><span data-lang="en">Ages 2–12</span><span data-lang="pt">2 a 12 anos</span></span>
+                </div>
+                <div class="guest-stepper">
+                  <button class="g-btn" id="childrenMinus" onclick="changeGuests('children',-1)" aria-label="−">−</button>
+                  <span class="g-count" id="childrenCount">0</span>
+                  <button class="g-btn" id="childrenPlus" onclick="changeGuests('children',1)" aria-label="+">+</button>
+                </div>
+              </div>
+            </div>
+            <p class="date-hint" id="guestMaxHint" style="display:none;">
+              <span data-lang="nl">Maximaal 6 gasten in totaal.</span><span data-lang="en">Maximum 6 guests in total.</span><span data-lang="pt">Máximo de 6 hóspedes no total.</span>
+            </p>
+          </div>
+
+          <!-- STEP 2: dates -->
+          <div>
+            <div class="wizard-step-label">
+              <span class="step-num">2</span>
+              <span data-lang="nl">Kies je datums in de kalender</span><span data-lang="en">Pick your dates in the calendar</span><span data-lang="pt">Escolha as suas datas no calendário</span>
+            </div>
+            <div class="date-summary">
+              <div class="date-cell">
+                <div class="d-label"><span data-lang="nl">Aankomst</span><span data-lang="en">Check-in</span><span data-lang="pt">Check-in</span></div>
+                <div class="d-value placeholder" id="checkinDisplay">
+                  <span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>
+                </div>
+              </div>
+              <div class="date-cell">
+                <div class="d-label"><span data-lang="nl">Vertrek</span><span data-lang="en">Check-out</span><span data-lang="pt">Check-out</span></div>
+                <div class="d-value placeholder" id="checkoutDisplay">
+                  <span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>
+                </div>
+              </div>
+            </div>
+            <p class="date-hint" id="dateHint">
+              <span data-lang="nl">Klik eerst op je aankomstdag, daarna op je vertrekdag. Minimaal 2 nachten.</span>
+              <span data-lang="en">Click your arrival day first, then your departure day. Minimum 2 nights.</span>
+              <span data-lang="pt">Clique primeiro no dia de chegada, depois no de partida. Mínimo 2 noites.</span>
+            </p>
+            <button class="date-reset" id="dateReset" onclick="resetDates()" style="display:none;">
+              <span data-lang="nl">Wis selectie</span><span data-lang="en">Clear selection</span><span data-lang="pt">Limpar seleção</span>
+            </button>
+          </div>
+
+          <!-- STEP 3: price -->
+          <div class="price-card" id="priceCard">
+            <div class="price-row">
+              <span class="p-calc" id="priceNightsLabel">€ 0 × 0</span>
+              <span id="priceNightsTotal">€ 0</span>
+            </div>
+            <div class="price-row">
+              <span><span data-lang="nl">Schoonmaakkosten</span><span data-lang="en">Cleaning fee</span><span data-lang="pt">Taxa de limpeza</span></span>
+              <span id="priceCleaning">€ 0</span>
+            </div>
+            <div class="price-row fee">
+              <span class="p-calc" title="Berekend en geïnd door Airbnb" id="priceServiceLabel"><span data-lang="nl">Airbnb servicekosten (~14%)</span><span data-lang="en">Airbnb service fee (~14%)</span><span data-lang="pt">Taxa de serviço Airbnb (~14%)</span></span>
+              <span id="priceService">€ 0</span>
+            </div>
+            <div class="price-divider"></div>
+            <div class="price-total">
+              <span class="pt-label"><span data-lang="nl">Geschat totaal</span><span data-lang="en">Estimated total</span><span data-lang="pt">Total estimado</span></span>
+              <span class="pt-value" id="priceTotal">€ 0</span>
+            </div>
+            <p class="price-disclaimer">
+              <span data-lang="nl">Indicatieve prijs. De definitieve prijs incl. servicekosten zie je op Airbnb en kan variëren per seizoen en aanbieding.</span>
+              <span data-lang="en">Indicative price. The final price incl. service fees is shown on Airbnb and may vary by season and offers.</span>
+              <span data-lang="pt">Preço indicativo. O preço final com taxas é mostrado no Airbnb e pode variar por época e promoções.</span>
+            </p>
+            <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="wizard-book-btn" id="wizardBookBtn">
+              <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
+              <span data-lang="nl">Reserveer op Airbnb</span><span data-lang="en">Reserve on Airbnb</span><span data-lang="pt">Reservar no Airbnb</span>
+            </a>
+          </div>
+
+          <!-- check-in/out info -->
+          <p class="date-hint">
+            <span data-lang="nl"><strong style="color:rgba(255,255,255,0.7)">Aankomst</strong> vanaf 15:00 · <strong style="color:rgba(255,255,255,0.7)">Vertrek</strong> voor 10:00</span>
+            <span data-lang="en"><strong style="color:rgba(255,255,255,0.7)">Check-in</strong> from 15:00 · <strong style="color:rgba(255,255,255,0.7)">Check-out</strong> before 10:00</span>
+            <span data-lang="pt"><strong style="color:rgba(255,255,255,0.7)">Check-in</strong> a partir das 15:00 · <strong style="color:rgba(255,255,255,0.7)">Check-out</strong> antes das 10:00</span>
+          </p>
+          <div class="cal-next-avail" id="calNextAvail" style="display:none;"><i data-lucide="calendar-check"></i><span id="calNextAvailText"></span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<div class="wave-divider" style="background:var(--navy-deep);" aria-hidden="true">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path fill="var(--cream)" d="M0,60 L1440,60 L1440,28 C1080,58 720,12 360,32 C240,40 120,28 0,35 Z"/></svg>
+</div>
+
 <!-- REVIEWS -->
 <section class="reviews-section">
-  <div class="reviews-inner">
-    <p class="section-tag" data-lang="nl">Wat gasten zeggen</p>
-    <p class="section-tag" data-lang="en">What guests say</p>
-    <p class="section-tag" data-lang="pt">O que os hóspedes dizem</p>
-    <h2 class="section-title" data-lang="nl">Recensies</h2>
-    <h2 class="section-title" data-lang="en">Reviews</h2>
-    <h2 class="section-title" data-lang="pt">Avaliações</h2>
+  <div class="reviews-inner section-num-wrap">
+    <span class="section-num">05</span>
+    <p class="section-tag reveal" data-lang="nl">Wat gasten zeggen</p>
+    <p class="section-tag reveal" data-lang="en">What guests say</p>
+    <p class="section-tag reveal" data-lang="pt">O que os hóspedes dizem</p>
+    <h2 class="section-title reveal" data-lang="nl">Recensies</h2>
+    <h2 class="section-title reveal" data-lang="en">Reviews</h2>
+    <h2 class="section-title reveal" data-lang="pt">Avaliações</h2>
     <div class="reviews-score">
       <span class="score-big">5,0</span>
       <div>
@@ -1781,7 +2203,7 @@
         <p class="review-text" data-lang="nl">"Prachtige locatie op het eiland. Het huis is knus en goed uitgerust. De communicatie met de host was uitstekend."</p>
         <p class="review-text" data-lang="en">"Beautiful location on the island. The house is cosy and well-equipped. Communication with the host was excellent."</p>
         <p class="review-text" data-lang="pt">"Localização fantástica na ilha. A casa é acolhedora e bem equipada. A comunicação com o anfitrião foi excelente."</p>
-        <span class="review-author">— Sandra · Airbnb · 2024</span>
+        <span class="review-author">Sandra · Airbnb · 2024</span>
       </div>
       <div class="review-item reveal">
         <div class="review-stars">★ ★ ★ ★ ★</div>
@@ -1789,7 +2211,7 @@
         <p class="review-text" data-lang="nl">"Ideaal voor een gezinsvakantie. De kinderen vonden het strand geweldig, en wij genoten van de rust en het terras."</p>
         <p class="review-text" data-lang="en">"Ideal for a family holiday. The kids loved the beach, and we enjoyed the peace and quiet and the terrace."</p>
         <p class="review-text" data-lang="pt">"Ideal para umas férias em família. Os miúdos adoraram a praia e nós desfrutámos da tranquilidade e do terraço."</p>
-        <span class="review-author">— Mark · Airbnb · 2024</span>
+        <span class="review-author">Mark · Airbnb · 2024</span>
       </div>
       <div class="review-item reveal">
         <div class="review-stars">★ ★ ★ ★ ★</div>
@@ -1797,7 +2219,7 @@
         <p class="review-text" data-lang="nl">"Het autovrije eiland geeft een gevoel van totale ontspanning. De houten loopbrug naar het strand is prachtig."</p>
         <p class="review-text" data-lang="en">"The car-free island gives a feeling of complete relaxation. The wooden boardwalk to the beach is beautiful."</p>
         <p class="review-text" data-lang="pt">"A ilha sem carros proporciona uma sensação de descanso total. A passadeira de madeira para a praia é linda."</p>
-        <span class="review-author">— Familie De Vries · Airbnb · 2025</span>
+        <span class="review-author">Familie De Vries · Airbnb · 2025</span>
       </div>
     </div>
     <div class="review-attribution reveal">
@@ -1819,33 +2241,114 @@
     <h2 class="section-title" data-lang="en">Questions or information?</h2>
     <h2 class="section-title" data-lang="pt">Perguntas ou informações?</h2>
     <div class="contact-layout">
-      <div class="contact-cards">
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="action-card airbnb-card">
-          <div class="action-card-header">
-            <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-            <span class="action-card-title" data-lang="nl">Boek via Airbnb</span>
-            <span class="action-card-title" data-lang="en">Book via Airbnb</span>
-            <span class="action-card-title" data-lang="pt">Reservar via Airbnb</span>
-          </div>
-          <p class="action-card-sub" data-lang="nl">Bekijk actuele beschikbaarheid en prijs</p>
-          <p class="action-card-sub" data-lang="en">Check current availability and price</p>
-          <p class="action-card-sub" data-lang="pt">Ver disponibilidade e preço atual</p>
-          <div class="action-card-arrow">→</div>
-        </a>
-        <a href="mailto:bertverboom@gmail.com" class="action-card email-card">
-          <div class="action-card-header">
-            <i data-lucide="mail" style="width:22px;height:22px;stroke:var(--gold-light);"></i>
-            <span class="action-card-title" data-lang="nl">Stuur een e-mail</span>
-            <span class="action-card-title" data-lang="en">Send an email</span>
-            <span class="action-card-title" data-lang="pt">Enviar e-mail</span>
-          </div>
-          <p class="action-card-sub">bertverboom@gmail.com</p>
-          <div class="action-card-arrow">→</div>
-        </a>
-        <div class="contact-map">
-          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-7.72,37.00,-7.67,37.04&amp;layer=mapnik&amp;marker=37.02,-7.695" title="Ilha Armona kaart" loading="lazy"></iframe>
+
+      <!-- FORMULIER -->
+      <form id="contactForm" class="contact-form" novalidate>
+
+        <!-- Aanhef -->
+        <div class="form-group">
+          <label data-lang="nl">Aanhef</label>
+          <label data-lang="en">Title</label>
+          <label data-lang="pt">Tratamento</label>
+          <select class="aanhef-select" data-lang="nl">
+            <option value="">--</option>
+            <option value="De heer">De heer</option>
+            <option value="Mevrouw">Mevrouw</option>
+            <option value="Familie">Familie</option>
+          </select>
+          <select class="aanhef-select" data-lang="en">
+            <option value="">--</option>
+            <option value="Mr.">Mr.</option>
+            <option value="Ms.">Ms.</option>
+            <option value="Mx.">Mx.</option>
+          </select>
+          <select class="aanhef-select" data-lang="pt">
+            <option value="">--</option>
+            <option value="Sr.">Sr.</option>
+            <option value="Sra.">Sra.</option>
+          </select>
         </div>
-      </div>
+
+        <!-- Voornaam + achternaam -->
+        <div class="form-row">
+          <div class="form-group">
+            <label data-lang="nl">Voornaam *</label>
+            <label data-lang="en">First name *</label>
+            <label data-lang="pt">Nome *</label>
+            <input type="text" name="voornaam" required autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label data-lang="nl">Achternaam *</label>
+            <label data-lang="en">Last name *</label>
+            <label data-lang="pt">Apelido *</label>
+            <input type="text" name="achternaam" required autocomplete="family-name">
+          </div>
+        </div>
+
+        <!-- E-mail + telefoon -->
+        <div class="form-row">
+          <div class="form-group">
+            <label data-lang="nl">E-mailadres *</label>
+            <label data-lang="en">Email address *</label>
+            <label data-lang="pt">E-mail *</label>
+            <input type="email" name="email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label data-lang="nl">Telefoon</label>
+            <label data-lang="en">Phone</label>
+            <label data-lang="pt">Telefone</label>
+            <input type="tel" name="telefoon" autocomplete="tel">
+          </div>
+        </div>
+
+        <!-- Aankomst + vertrek -->
+        <div class="form-row">
+          <div class="form-group">
+            <label data-lang="nl">Aankomstdatum</label>
+            <label data-lang="en">Check-in date</label>
+            <label data-lang="pt">Data de chegada</label>
+            <input type="date" name="aankomst" id="formCheckin">
+          </div>
+          <div class="form-group">
+            <label data-lang="nl">Vertrekdatum</label>
+            <label data-lang="en">Check-out date</label>
+            <label data-lang="pt">Data de partida</label>
+            <input type="date" name="vertrek" id="formCheckout">
+          </div>
+        </div>
+
+        <!-- Personen -->
+        <div class="form-group">
+          <label data-lang="nl">Aantal personen</label>
+          <label data-lang="en">Number of guests</label>
+          <label data-lang="pt">Número de pessoas</label>
+          <input type="number" name="personen" id="formPersons" min="1" max="6" value="2">
+        </div>
+
+        <!-- Bericht -->
+        <div class="form-group">
+          <label data-lang="nl">Uw bericht *</label>
+          <label data-lang="en">Your message *</label>
+          <label data-lang="pt">A sua mensagem *</label>
+          <textarea name="bericht" required></textarea>
+        </div>
+
+        <!-- Captcha -->
+        <div class="form-group captcha-group">
+          <label id="captchaLabel"></label>
+          <input type="number" id="captchaInput" min="0" max="100" autocomplete="off">
+        </div>
+
+        <div class="form-feedback" id="formFeedback"></div>
+        <button type="submit" class="submit-btn">
+          <span data-lang="nl">Verstuur bericht</span>
+          <span data-lang="en">Send message</span>
+          <span data-lang="pt">Enviar mensagem</span>
+        </button>
+
+      </form>
+
+      <!-- CONTACT DETAILS + KAART -->
       <div class="contact-details">
         <div class="contact-detail-item">
           <div class="detail-icon">
@@ -1891,7 +2394,11 @@
             </div>
           </div>
         </div>
+        <div class="contact-map">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-7.715,37.015,-7.660,37.040&amp;layer=mapnik&amp;marker=37.027,-7.693" title="Ilha Armona kaart" loading="lazy"></iframe>
+        </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -1926,6 +2433,9 @@
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll(`.lang-btn[onclick="setLang('${lang}')"]`).forEach(b => b.classList.add('active'));
     renderCalendar();
+    if (typeof computeNextAvailable === 'function') computeNextAvailable();
+    if (typeof updateWizard === 'function') updateWizard();
+    if (typeof updateContactCaptcha === 'function') updateContactCaptcha();
   }
   function currentLang() { return document.body.className.replace('lang-',''); }
 
@@ -1946,26 +2456,71 @@
     document.body.style.overflow = '';
   }
 
-  // ── PARALLAX ──
+  // ── UNIFIED SCROLL HANDLER ──
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReducedMotion) {
-    const heroBg = document.querySelector('.hero-bg');
-    window.addEventListener('scroll', () => {
-      if (heroBg) heroBg.style.transform = `scale(1.05) translateY(${window.scrollY * 0.15}px)`;
-    }, {passive: true});
-  }
-
-  // ── SCROLL INDICATOR ──
+  const heroBg = document.querySelector('.hero-bg');
   const scrollInd = document.getElementById('scrollIndicator');
-  window.addEventListener('scroll', () => {
-    if (scrollInd) scrollInd.classList.toggle('hidden', window.scrollY > 10);
-  }, {passive: true});
-
-  // ── BACK TO TOP ──
   const btt = document.getElementById('backToTop');
+  const progressBar = document.getElementById('scrollProgress');
+  const parallaxImgs = document.querySelectorAll('.parallax-img');
+  let ticking = false;
+
+  function onScroll() {
+    const y = window.scrollY;
+    // scroll progress
+    if (progressBar) {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+    }
+    // scroll indicator + back to top
+    if (scrollInd) scrollInd.classList.toggle('hidden', y > 10);
+    if (btt) btt.classList.toggle('visible', y > 400);
+    if (!prefersReducedMotion) {
+      if (heroBg) heroBg.style.transform = `scale(1.05) translateY(${y * 0.15}px)`;
+      // image parallax (only when near viewport)
+      parallaxImgs.forEach(img => {
+        const r = img.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < window.innerHeight) {
+          const speed = parseFloat(img.dataset.speed || '0.05');
+          const offset = (r.top - window.innerHeight / 2) * -speed;
+          img.style.transform = `translateY(${offset}px) scale(1.06)`;
+        }
+      });
+    }
+    ticking = false;
+  }
   window.addEventListener('scroll', () => {
-    if (btt) btt.classList.toggle('visible', window.scrollY > 400);
+    if (!ticking) { window.requestAnimationFrame(onScroll); ticking = true; }
   }, {passive: true});
+  onScroll();
+
+  // ── HERO TAG CHAR SPLIT ──
+  (function splitHeroTag(){
+    const tag = document.getElementById('heroTag');
+    if (!tag || prefersReducedMotion) return;
+    const text = tag.textContent;
+    tag.innerHTML = '';
+    [...text].forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.className = 'char';
+      s.textContent = ch === ' ' ? ' ' : ch;
+      s.style.animationDelay = (0.5 + i * 0.03) + 's';
+      tag.appendChild(s);
+    });
+  })();
+
+  // ── MAGNETIC BUTTONS ──
+  if (!prefersReducedMotion && window.matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('.hero-cta').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const mx = e.clientX - r.left - r.width / 2;
+        const my = e.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${mx * 0.15}px, ${my * 0.25}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+  }
 
   // ── SCROLL REVEAL ──
   if (!prefersReducedMotion) {
@@ -1974,6 +2529,24 @@
     }, {threshold: 0.12});
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
   }
+
+  // ── COUNT-UP STATS ──
+  function countUp(el) {
+    const target = parseInt(el.dataset.count, 10);
+    if (prefersReducedMotion || isNaN(target)) { el.textContent = target; return; }
+    const dur = 1200, start = performance.now();
+    function step(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  const countObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); countObs.unobserve(e.target); } });
+  }, {threshold: 0.5});
+  document.querySelectorAll('.stat-number[data-count]').forEach(el => countObs.observe(el));
 
   // ── ACTIVE NAV ──
   const sections = document.querySelectorAll('section[id]');
@@ -1991,6 +2564,24 @@
   // ── CALENDAR ──
   let calYear, calMonth;
   let bookedDates = new Set();
+
+  // ── BOOKING WIZARD CONFIG ──
+  // Pas deze tarieven aan; Airbnb toont de definitieve prijs na doorklikken.
+  const PRICING = {
+    nightlyRate: 130,        // € per nacht (indicatief)
+    cleaningFee: 75,         // € eenmalig
+    serviceFeeRate: 0.14,    // ~14% Airbnb servicekosten (schatting)
+    minStay: 2,              // minimum aantal nachten
+    maxGuests: 6,
+  };
+  const ROOM_URL = 'https://www.airbnb.nl/rooms/27625624';
+  // wizard state (persists across language switches via sessionStorage)
+  let sel = { checkin: null, checkout: null, adults: 2, children: 0 };
+  try {
+    const saved = JSON.parse(sessionStorage.getItem('cda_booking') || 'null');
+    if (saved) sel = Object.assign(sel, saved);
+  } catch(e) {}
+  function saveSel() { try { sessionStorage.setItem('cda_booking', JSON.stringify(sel)); } catch(e) {} }
   const MONTH_NAMES = {
     nl: ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'],
     en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
@@ -2009,46 +2600,80 @@
     calYear = now.getFullYear();
     calMonth = now.getMonth();
     showCalSkeleton();
+    updateWizard();
     loadIcal();
   }
 
   async function loadIcal() {
     const statusEl = document.getElementById('cal-status');
-    const icalUrl = 'https://www.airbnb.nl/calendar/ical/27625624.ics?s=dd993d0d91cef80d93d7df40d2a00cfe';
-    const proxies = [
-      'https://api.allorigins.win/get?url=' + encodeURIComponent(icalUrl),
-      'https://corsproxy.io/?' + encodeURIComponent(icalUrl)
+    // Try both .nl and .com — one may be blocked by a proxy while the other works
+    const icalUrls = [
+      'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
+      'https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
     ];
+    const proxyFns = [
+      u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+      u => 'https://api.allorigins.win/get?url='  + encodeURIComponent(u),
+      u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+      u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+      u => 'https://thingproxy.freeboard.io/fetch/' + u,
+    ];
+    // Build attempts: each proxy with each URL
+    const attempts = [];
+    for (const u of icalUrls) for (const fn of proxyFns) attempts.push(fn(u));
+
     let loaded = false;
-    for (const proxy of proxies) {
+    bookedDates = new Set();
+    for (const proxyUrl of attempts) {
       try {
-        const res = await fetch(proxy);
-        const data = await res.json();
-        const text = data.contents || data;
-        parseIcal(typeof text === 'string' ? text : JSON.stringify(text));
-        statusEl.textContent = '';
-        loaded = true;
-        break;
+        const res = await fetch(proxyUrl, { cache: 'no-cache' });
+        if (!res.ok) continue;
+        const raw = await res.text();
+        let icalText = raw;
+        // allorigins /get wraps content in JSON {contents:"..."}
+        if (raw.trimStart().startsWith('{')) {
+          try { const j = JSON.parse(raw); if (j.contents) icalText = j.contents; } catch {}
+        }
+        if (icalText && icalText.includes('BEGIN:VCALENDAR')) {
+          parseIcal(icalText);
+          if (statusEl) statusEl.textContent = '';
+          loaded = true;
+          break;
+        }
       } catch(e) { /* try next */ }
     }
     if (!loaded) {
       const lang = currentLang();
-      statusEl.className = 'cal-error';
-      statusEl.innerHTML = (lang==='nl' ? '⚠ Agenda kon niet worden geladen. ' : lang==='en' ? '⚠ Calendar could not be loaded. ' : '⚠ Calendário não carregou. ')
-        + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
+      if (statusEl) {
+        statusEl.className = 'cal-error';
+        statusEl.innerHTML = (lang==='nl' ? '⚠ Agenda kon niet worden geladen. ' : lang==='en' ? '⚠ Calendar could not be loaded. ' : '⚠ Calendário não carregou. ')
+          + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
+      }
     }
+    // clear a saved selection that now conflicts with booked dates
+    if (sel.checkin && (bookedDates.has(sel.checkin) || sel.checkin < new Date().toISOString().slice(0,10))) { sel.checkin = null; sel.checkout = null; saveSel(); }
+    if (sel.checkin && sel.checkout && crossesBooked(sel.checkin, sel.checkout)) { sel.checkout = null; saveSel(); }
     renderCalendar();
+    updateWizard();
+    if (loaded) computeNextAvailable();
   }
 
   function parseIcal(text) {
     if (!text) return;
-    const lines = text.split(/\r?\n/);
+    // Unfold iCal lines (CRLF + whitespace = continuation)
+    const unfolded = text.replace(/\r?\n[ \t]/g, '');
+    const lines = unfolded.split(/\r?\n/);
     let inEvent = false, dtStart = null, dtEnd = null;
     for (const line of lines) {
       if (line.startsWith('BEGIN:VEVENT')) { inEvent = true; dtStart = null; dtEnd = null; }
       if (!inEvent) continue;
-      if (line.startsWith('DTSTART')) { const val = line.split(':')[1]?.trim(); if (val) dtStart = parseIcalDate(val); }
-      if (line.startsWith('DTEND'))   { const val = line.split(':')[1]?.trim(); if (val) dtEnd   = parseIcalDate(val); }
+      // Value is everything after the last colon (handles DTSTART;VALUE=DATE:20260614)
+      const colonIdx = line.indexOf(':');
+      if (colonIdx < 0) continue;
+      const key = line.slice(0, colonIdx).split(';')[0]; // strip params like ;VALUE=DATE
+      const val = line.slice(colonIdx + 1).trim();
+      if (key === 'DTSTART' && val) dtStart = parseIcalDate(val);
+      if (key === 'DTEND'   && val) dtEnd   = parseIcalDate(val);
       if (line.startsWith('END:VEVENT') && dtStart && dtEnd) {
         let cur = new Date(dtStart);
         while (cur < dtEnd) { bookedDates.add(cur.toISOString().slice(0,10)); cur.setDate(cur.getDate()+1); }
@@ -2078,24 +2703,222 @@
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const isPast = dateStr < nowStr;
-      const cls = ['cal-day',
-        isPast ? 'past' : (bookedDates.has(dateStr) ? 'booked' : 'available'),
-        dateStr === todayStr ? 'today' : ''
-      ].filter(Boolean).join(' ');
-      html += `<div class="${cls}">${d}</div>`;
+      const isBooked = bookedDates.has(dateStr);
+      const classes = ['cal-day'];
+      if (isPast) classes.push('past');
+      else if (isBooked) classes.push('booked');
+      else classes.push('available');
+      if (dateStr === todayStr) classes.push('today');
+      // range selection highlighting
+      if (sel.checkin && dateStr === sel.checkin) classes.push('range-start');
+      if (sel.checkout && dateStr === sel.checkout) classes.push('range-end');
+      if (sel.checkin && sel.checkout && dateStr > sel.checkin && dateStr < sel.checkout) classes.push('in-range');
+      // when picking checkout, disable days that would cross a booked night or are before checkin
+      if (sel.checkin && !sel.checkout && !isPast && !isBooked) {
+        if (dateStr <= sel.checkin || crossesBooked(sel.checkin, dateStr)) classes.push('range-disabled');
+      }
+      const clickable = !isPast && !isBooked;
+      const attr = clickable ? ` onclick="pickDate('${dateStr}')"` : '';
+      html += `<div class="${classes.join(' ')}" data-date="${dateStr}"${attr}>${d}</div>`;
     }
     grid.innerHTML = html;
   }
 
-  function renderCalendar() {
+  // does the range [a,b) cover any booked night? (b is checkout, exclusive)
+  function crossesBooked(a, b) {
+    let cur = new Date(a + 'T00:00:00');
+    const end = new Date(b + 'T00:00:00');
+    cur.setDate(cur.getDate() + 1);
+    while (cur < end) {
+      if (bookedDates.has(cur.toISOString().slice(0,10))) return true;
+      cur.setDate(cur.getDate() + 1);
+    }
+    return false;
+  }
+
+  function renderCalendar(animate) {
     renderOneMonth('cal-grid', 'cal-month-label', calYear, calMonth);
     const nextM = calMonth === 11 ? 0 : calMonth + 1;
     const nextY = calMonth === 11 ? calYear + 1 : calYear;
     renderOneMonth('cal-grid-2', 'cal-month-label-2', nextY, nextM);
+    if (animate && !prefersReducedMotion) {
+      ['cal-grid','cal-grid-2'].forEach(id => {
+        const g = document.getElementById(id);
+        if (g) { g.classList.remove('swap-in'); void g.offsetWidth; g.classList.add('swap-in'); }
+      });
+    }
   }
 
-  function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
-  function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+  function computeNextAvailable() {
+    const el = document.getElementById('calNextAvail');
+    const txt = document.getElementById('calNextAvailText');
+    if (!el || !txt) return;
+    const lang = currentLang();
+    const today = new Date(); today.setHours(0,0,0,0);
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(today); d.setDate(today.getDate() + i);
+      const ds = d.toISOString().slice(0,10);
+      if (!bookedDates.has(ds)) {
+        const dn = d.getDate();
+        const mn = (MONTH_NAMES[lang]||MONTH_NAMES.nl)[d.getMonth()];
+        const label = lang==='nl' ? `Eerstvolgende vrije dag: ${dn} ${mn}`
+                    : lang==='en' ? `Next available day: ${dn} ${mn}`
+                    : `Próximo dia livre: ${dn} ${mn}`;
+        txt.textContent = label;
+        el.style.display = 'flex';
+        return;
+      }
+    }
+    el.style.display = 'none';
+  }
+
+  function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(true); }
+  function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(true); }
+
+  // ── BOOKING WIZARD LOGIC ──
+  function changeGuests(type, delta) {
+    const total = sel.adults + sel.children;
+    if (delta > 0 && total >= PRICING.maxGuests) { flashGuestMax(); return; }
+    if (type === 'adults')   sel.adults   = Math.min(PRICING.maxGuests, Math.max(1, sel.adults + delta));
+    if (type === 'children') sel.children = Math.min(PRICING.maxGuests - 1, Math.max(0, sel.children + delta));
+    // keep total within max
+    while (sel.adults + sel.children > PRICING.maxGuests) {
+      if (type === 'adults' && sel.children > 0) sel.children--; else break;
+    }
+    saveSel();
+    updateWizard();
+  }
+  function flashGuestMax() {
+    const h = document.getElementById('guestMaxHint');
+    if (h) { h.style.display = 'block'; clearTimeout(h._t); h._t = setTimeout(() => h.style.display = 'none', 2500); }
+  }
+
+  function pickDate(dateStr) {
+    if (!sel.checkin || (sel.checkin && sel.checkout)) {
+      // start a new selection
+      sel.checkin = dateStr; sel.checkout = null;
+    } else {
+      // selecting checkout
+      if (dateStr <= sel.checkin) { sel.checkin = dateStr; sel.checkout = null; }
+      else if (crossesBooked(sel.checkin, dateStr)) { sel.checkin = dateStr; sel.checkout = null; }
+      else {
+        const nights = nightsBetween(sel.checkin, dateStr);
+        if (nights < PRICING.minStay) { showMinStayWarning(); return; }
+        sel.checkout = dateStr;
+      }
+    }
+    saveSel();
+    renderCalendar();
+    updateWizard();
+  }
+
+  function resetDates() {
+    sel.checkin = null; sel.checkout = null;
+    saveSel();
+    renderCalendar();
+    updateWizard();
+  }
+
+  function nightsBetween(a, b) {
+    return Math.round((new Date(b) - new Date(a)) / 86400000);
+  }
+
+  function showMinStayWarning() {
+    const lang = currentLang();
+    const h = document.getElementById('dateHint');
+    if (!h) return;
+    h.classList.add('warn');
+    h.dataset.warn = '1';
+    h.innerHTML = lang==='nl' ? `Minimaal ${PRICING.minStay} nachten verblijf.`
+                : lang==='en' ? `Minimum stay is ${PRICING.minStay} nights.`
+                : `Estadia mínima de ${PRICING.minStay} noites.`;
+    clearTimeout(h._t); h._t = setTimeout(() => { h.classList.remove('warn'); delete h.dataset.warn; updateWizard(); }, 2800);
+  }
+
+  function formatDate(dateStr, lang) {
+    const d = new Date(dateStr + 'T00:00:00');
+    const dayNames = {
+      nl: ['zo','ma','di','wo','do','vr','za'],
+      en: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      pt: ['dom','seg','ter','qua','qui','sex','sáb']
+    };
+    const dn = (dayNames[lang]||dayNames.nl)[d.getDay()];
+    const mn = (MONTH_NAMES[lang]||MONTH_NAMES.nl)[d.getMonth()].slice(0,3).toLowerCase();
+    return `${dn} ${d.getDate()} ${mn}`;
+  }
+
+  function fmtEuro(n) {
+    return '€ ' + n.toLocaleString('nl-NL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function buildAirbnbUrl() {
+    let url = ROOM_URL;
+    const params = [];
+    if (sel.checkin)  params.push('check_in='  + sel.checkin);
+    if (sel.checkout) params.push('check_out=' + sel.checkout);
+    params.push('adults=' + sel.adults);
+    if (sel.children > 0) params.push('children=' + sel.children);
+    params.push('guests=' + (sel.adults + sel.children));
+    return url + (params.length ? '?' + params.join('&') : '');
+  }
+
+  function updateWizard() {
+    const lang = currentLang();
+    // guest counts
+    const ac = document.getElementById('adultsCount'); if (ac) ac.textContent = sel.adults;
+    const cc = document.getElementById('childrenCount'); if (cc) cc.textContent = sel.children;
+    const total = sel.adults + sel.children;
+    const atMax = total >= PRICING.maxGuests;
+    const ap = document.getElementById('adultsPlus'); if (ap) ap.disabled = atMax;
+    const cp = document.getElementById('childrenPlus'); if (cp) cp.disabled = atMax || sel.children >= PRICING.maxGuests - 1;
+    const am = document.getElementById('adultsMinus'); if (am) am.disabled = sel.adults <= 1;
+    const cm = document.getElementById('childrenMinus'); if (cm) cm.disabled = sel.children <= 0;
+
+    // date displays
+    const ci = document.getElementById('checkinDisplay');
+    const co = document.getElementById('checkoutDisplay');
+    if (ci) {
+      if (sel.checkin) { ci.textContent = formatDate(sel.checkin, lang); ci.classList.remove('placeholder'); }
+      else { ci.innerHTML = `<span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>`; ci.classList.add('placeholder'); }
+    }
+    if (co) {
+      if (sel.checkout) { co.textContent = formatDate(sel.checkout, lang); co.classList.remove('placeholder'); }
+      else { co.innerHTML = `<span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>`; co.classList.add('placeholder'); }
+    }
+    const reset = document.getElementById('dateReset');
+    if (reset) reset.style.display = (sel.checkin || sel.checkout) ? 'block' : 'none';
+
+    // hint (skip if warning is showing)
+    const hint = document.getElementById('dateHint');
+    if (hint && !hint.dataset.warn) {
+      hint.classList.remove('warn');
+      if (!sel.checkin) hint.innerHTML = `<span data-lang="nl">Klik eerst op je aankomstdag, daarna op je vertrekdag. Minimaal 2 nachten.</span><span data-lang="en">Click your arrival day first, then your departure day. Minimum 2 nights.</span><span data-lang="pt">Clique primeiro no dia de chegada, depois no de partida. Mínimo 2 noites.</span>`;
+      else if (!sel.checkout) hint.innerHTML = `<span data-lang="nl">Kies nu je vertrekdag.</span><span data-lang="en">Now choose your departure day.</span><span data-lang="pt">Agora escolha o dia de partida.</span>`;
+      else { const n = nightsBetween(sel.checkin, sel.checkout); hint.innerHTML = `<span data-lang="nl">${n} ${n===1?'nacht':'nachten'} geselecteerd.</span><span data-lang="en">${n} ${n===1?'night':'nights'} selected.</span><span data-lang="pt">${n} ${n===1?'noite':'noites'} selecionadas.</span>`; }
+    }
+
+    // price card
+    const card = document.getElementById('priceCard');
+    if (sel.checkin && sel.checkout) {
+      const nights = nightsBetween(sel.checkin, sel.checkout);
+      const nightsTotal = PRICING.nightlyRate * nights;
+      const subtotal = nightsTotal + PRICING.cleaningFee;
+      const service = Math.round(subtotal * PRICING.serviceFeeRate);
+      const total = subtotal + service;
+      document.getElementById('priceNightsLabel').textContent = `${fmtEuro(PRICING.nightlyRate)} × ${nights} ${nights===1?(lang==='en'?'night':lang==='pt'?'noite':'nacht'):(lang==='en'?'nights':lang==='pt'?'noites':'nachten')}`;
+      document.getElementById('priceNightsTotal').textContent = fmtEuro(nightsTotal);
+      document.getElementById('priceCleaning').textContent = fmtEuro(PRICING.cleaningFee);
+      document.getElementById('priceService').textContent = fmtEuro(service);
+      document.getElementById('priceTotal').textContent = fmtEuro(total);
+      card.classList.add('show');
+    } else if (card) {
+      card.classList.remove('show');
+    }
+
+    // book button always reflects current selection/guests
+    const btn = document.getElementById('wizardBookBtn');
+    if (btn) btn.href = buildAirbnbUrl();
+  }
 
   // ── LIGHTBOX ──
   const galleryPhotos = [
@@ -2107,24 +2930,52 @@
     {src:'https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/1d1818e7-3a73-4757-be97-e8a140045fe1.jpeg', cap:'Slaapkamer 2'}
   ];
   let currentPhoto = 0;
+  // build thumbnails once
+  (function buildThumbs(){
+    const wrap = document.getElementById('lightboxThumbs');
+    if (!wrap) return;
+    galleryPhotos.forEach((p, i) => {
+      const t = document.createElement('img');
+      t.src = p.src; t.alt = p.cap; t.loading = 'lazy';
+      t.onclick = () => showPhoto(i);
+      wrap.appendChild(t);
+    });
+  })();
+
+  function updateLightboxUI() {
+    const img = document.getElementById('lightboxImg');
+    img.classList.add('swapping');
+    setTimeout(() => {
+      img.src = galleryPhotos[currentPhoto].src;
+      img.alt = galleryPhotos[currentPhoto].cap;
+      img.classList.remove('swapping');
+    }, 180);
+    document.getElementById('lightboxCaption').textContent = galleryPhotos[currentPhoto].cap;
+    document.getElementById('lightboxCounter').textContent = (currentPhoto+1) + ' / ' + galleryPhotos.length;
+    document.querySelectorAll('#lightboxThumbs img').forEach((t,i) => t.classList.toggle('active', i === currentPhoto));
+  }
+  function showPhoto(i) { currentPhoto = i; updateLightboxUI(); }
   function openLightbox(i) {
     currentPhoto = i;
     const lb = document.getElementById('lightbox');
-    document.getElementById('lightboxImg').src = galleryPhotos[i].src;
-    document.getElementById('lightboxImg').alt = galleryPhotos[i].cap;
+    const img = document.getElementById('lightboxImg');
+    img.src = galleryPhotos[i].src; img.alt = galleryPhotos[i].cap;
     document.getElementById('lightboxCaption').textContent = galleryPhotos[i].cap;
+    document.getElementById('lightboxCounter').textContent = (i+1) + ' / ' + galleryPhotos.length;
+    document.querySelectorAll('#lightboxThumbs img').forEach((t,j) => t.classList.toggle('active', j === i));
     lb.classList.add('open');
+    requestAnimationFrame(() => lb.classList.add('shown'));
     document.body.style.overflow = 'hidden';
   }
   function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
+    const lb = document.getElementById('lightbox');
+    lb.classList.remove('shown');
+    setTimeout(() => lb.classList.remove('open'), 350);
     document.body.style.overflow = '';
   }
   function lightboxNav(dir) {
     currentPhoto = (currentPhoto + dir + galleryPhotos.length) % galleryPhotos.length;
-    document.getElementById('lightboxImg').src = galleryPhotos[currentPhoto].src;
-    document.getElementById('lightboxImg').alt = galleryPhotos[currentPhoto].cap;
-    document.getElementById('lightboxCaption').textContent = galleryPhotos[currentPhoto].cap;
+    updateLightboxUI();
   }
   document.addEventListener('keydown', e => {
     if (!document.getElementById('lightbox').classList.contains('open')) return;
@@ -2132,9 +2983,150 @@
     if (e.key === 'ArrowLeft') lightboxNav(-1);
     if (e.key === 'ArrowRight') lightboxNav(1);
   });
-  document.getElementById('lightbox').addEventListener('click', function(e) {
+  const lbEl = document.getElementById('lightbox');
+  lbEl.addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
   });
+  // swipe support
+  let touchX = null;
+  lbEl.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, {passive:true});
+  lbEl.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) lightboxNav(dx < 0 ? 1 : -1);
+    touchX = null;
+  }, {passive:true});
+
+  // ── CONTACT FORM ──
+  // Vervang YOUR_FORM_ID met jouw Formspree formulier-ID (formspree.io → New Form → endpoint URL)
+  const FORMSPREE_ID = 'YOUR_FORM_ID';
+
+  let _captchaA = 0, _captchaB = 0, _captchaAnswer = 0;
+
+  function genCaptcha() {
+    _captchaA = Math.floor(Math.random() * 9) + 1;
+    _captchaB = Math.floor(Math.random() * 9) + 1;
+    _captchaAnswer = _captchaA + _captchaB;
+    updateContactCaptcha();
+    const inp = document.getElementById('captchaInput');
+    if (inp) inp.value = '';
+  }
+
+  function updateContactCaptcha() {
+    const label = document.getElementById('captchaLabel');
+    if (!label || !_captchaA) return;
+    const lang = currentLang();
+    const q = {
+      nl: `Beveiligingsvraag: hoeveel is ${_captchaA} + ${_captchaB}?`,
+      en: `Security check: what is ${_captchaA} + ${_captchaB}?`,
+      pt: `Verificação: quanto é ${_captchaA} + ${_captchaB}?`,
+    };
+    label.textContent = q[lang] || q.nl;
+  }
+
+  // Pre-fill dates/guests from booking wizard
+  (function prefillContactForm() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('cda_booking') || 'null');
+      if (!saved) return;
+      const ci = document.getElementById('formCheckin');
+      const co = document.getElementById('formCheckout');
+      const ps = document.getElementById('formPersons');
+      if (ci && saved.checkin) ci.value = saved.checkin;
+      if (co && saved.checkout) co.value = saved.checkout;
+      const total = (saved.adults || 2) + (saved.children || 0);
+      if (ps && total > 0) ps.value = total;
+    } catch(e) {}
+  })();
+
+  genCaptcha();
+
+  (function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const lang = currentLang();
+      const feedback = document.getElementById('formFeedback');
+      const submitBtn = form.querySelector('.submit-btn');
+
+      // Captcha check
+      const captchaVal = parseInt(document.getElementById('captchaInput').value, 10);
+      if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
+        feedback.textContent = lang==='nl' ? 'Verkeerd antwoord. Probeer het opnieuw.'
+                             : lang==='en' ? 'Incorrect answer. Please try again.'
+                             : 'Resposta incorreta. Por favor tente novamente.';
+        feedback.className = 'form-feedback error';
+        genCaptcha();
+        return;
+      }
+
+      // Collect values
+      const aanhefSel = form.querySelector(`.aanhef-select[data-lang="${lang}"]`);
+      const aanhef    = aanhefSel ? aanhefSel.value : '';
+      const voornaam  = form.querySelector('[name="voornaam"]').value.trim();
+      const achternaam = form.querySelector('[name="achternaam"]').value.trim();
+      const email     = form.querySelector('[name="email"]').value.trim();
+      const telefoon  = form.querySelector('[name="telefoon"]').value.trim();
+      const aankomst  = form.querySelector('[name="aankomst"]').value;
+      const vertrek   = form.querySelector('[name="vertrek"]').value;
+      const personen  = form.querySelector('[name="personen"]').value;
+      const bericht   = form.querySelector('[name="bericht"]').value.trim();
+
+      // Required field validation
+      if (!voornaam || !achternaam || !email || !bericht) {
+        feedback.textContent = lang==='nl' ? 'Vul alle verplichte velden (*) in.'
+                             : lang==='en' ? 'Please fill in all required fields (*).'
+                             : 'Por favor preencha todos os campos obrigatórios (*).';
+        feedback.className = 'form-feedback error';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        feedback.textContent = lang==='nl' ? 'Vul een geldig e-mailadres in.'
+                             : lang==='en' ? 'Please enter a valid email address.'
+                             : 'Por favor insira um e-mail válido.';
+        feedback.className = 'form-feedback error';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.6';
+      feedback.className = 'form-feedback';
+
+      try {
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            aanhef, voornaam, achternaam, email, telefoon,
+            aankomst, vertrek, personen, bericht,
+            _subject: `Aanvraag Casa das Árvores – ${voornaam} ${achternaam}`,
+            _replyto: email,
+          }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok) {
+          form.innerHTML = `<div class="form-feedback success" style="display:block;">`
+            + (lang==='nl' ? `Bedankt, ${voornaam}! Uw bericht is ontvangen. We nemen zo spoedig mogelijk contact met u op.`
+             : lang==='en' ? `Thank you, ${voornaam}! Your message has been received. We'll be in touch soon.`
+             : `Obrigado, ${voornaam}! A sua mensagem foi recebida. Entraremos em contacto em breve.`)
+            + `</div>`;
+        } else {
+          throw new Error(json.error || 'server error');
+        }
+      } catch(err) {
+        feedback.textContent = lang==='nl'
+          ? 'Er is een fout opgetreden. Probeer het later opnieuw of stuur een e-mail naar bertverboom@gmail.com.'
+          : lang==='en'
+          ? 'Something went wrong. Please try again or email bertverboom@gmail.com.'
+          : 'Ocorreu um erro. Tente novamente ou envie um e-mail para bertverboom@gmail.com.';
+        feedback.className = 'form-feedback error';
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+      }
+    });
+  })();
 
   // ── INIT ──
   document.getElementById('footer-year').textContent = new Date().getFullYear();
