@@ -694,7 +694,7 @@
 
     .bedroom-card img {
       width: 100%;
-      height: 220px;
+      height: 280px;
       object-fit: cover;
       display: block;
       transition: transform 0.5s ease;
@@ -1380,6 +1380,22 @@
     .bedroom-icons { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.8rem; }
     .bedroom-icon-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--text-light); }
     .bedroom-icon-item svg { width: 14px; height: 14px; stroke: var(--gold); }
+    .bedroom-capacity {
+      position: absolute; top: 0.8rem; left: 0.8rem;
+      background: rgba(27,45,79,0.82); color: var(--cream);
+      font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.6rem; backdrop-filter: blur(4px);
+      display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    .bedroom-intro {
+      font-size: 0.9rem; font-family: 'Cormorant Garamond', serif;
+      font-style: italic; color: var(--navy); line-height: 1.6;
+      margin-bottom: 0.6rem;
+    }
+    .bedroom-desc {
+      font-size: 0.8rem; color: var(--text-light); line-height: 1.75;
+      margin-bottom: 0;
+    }
     .badge-ensuite {
       position: absolute; top: 0.8rem; right: 0.8rem;
       background: var(--gold); color: white;
@@ -1587,7 +1603,16 @@
 
     /* map */
     .contact-map { margin-top: 1.5rem; overflow: hidden; }
-    .contact-map iframe { display: block; width: 100%; height: 240px; border: none; }
+    .contact-map iframe { display: block; width: 100%; height: 280px; border: none; }
+    .map-links { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+    .map-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--navy); text-decoration: none; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .map-link:hover { color: var(--gold); }
+    .map-link svg { width: 15px; height: 15px; flex-shrink: 0; }
 
     /* ── CONTACT FORM (full) ── */
     .lang-nl .aanhef-select[data-lang="nl"],
@@ -2129,49 +2154,76 @@
     <h2 class="section-title" data-lang="en">Three bedrooms</h2>
     <h2 class="section-title" data-lang="pt">Três quartos</h2>
     <div class="bedrooms-grid">
+      <!-- Slaapkamer 1 -->
       <div class="bedroom-card reveal">
         <div class="bedroom-card-img" style="position:relative;">
-          <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/a5e48bd4-1baf-4345-94c7-1ca6c4463b1f.jpeg" alt="Slaapkamer 1" loading="lazy" />
+          <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/a5e48bd4-1baf-4345-94c7-1ca6c4463b1f.jpeg" alt="Slaapkamer 1 – twee eenpersoonsbedden" loading="lazy" />
+          <span class="bedroom-capacity">
+            <i data-lucide="users" style="width:12px;height:12px;"></i>
+            <span data-lang="nl">2 personen</span><span data-lang="en">2 guests</span><span data-lang="pt">2 pessoas</span>
+          </span>
         </div>
         <div class="bedroom-info">
           <h3 data-lang="nl">Slaapkamer 1</h3><h3 data-lang="en">Bedroom 1</h3><h3 data-lang="pt">Quarto 1</h3>
-          <p data-lang="nl">Twee losse eenpersoonsbedden (190×90 cm) met hangkast</p>
-          <p data-lang="en">Two single beds (190×90 cm) with wardrobe</p>
-          <p data-lang="pt">Duas camas individuais (190×90 cm) com roupeiro</p>
+          <p class="bedroom-intro" data-lang="nl">Licht en rustig — ideaal voor kinderen of vrienden die elk hun eigen bed willen.</p>
+          <p class="bedroom-intro" data-lang="en">Light and peaceful — ideal for children or friends who each prefer their own bed.</p>
+          <p class="bedroom-intro" data-lang="pt">Luminoso e tranquilo — ideal para crianças ou amigos que preferem camas separadas.</p>
+          <p class="bedroom-desc" data-lang="nl">Twee losse 190×90 cm eenpersoonsbedden met ruime hangkast en voldoende bergruimte voor een week vakantie. Het raam biedt prettig daglicht en frisse eilandlucht.</p>
+          <p class="bedroom-desc" data-lang="en">Two separate 190×90 cm single beds with spacious wardrobe and ample storage for a week's stay. The window brings in pleasant daylight and fresh island air.</p>
+          <p class="bedroom-desc" data-lang="pt">Duas camas individuais (190×90 cm) com roupeiro espaçoso e arrumação suficiente para uma semana de férias. A janela deixa entrar luz natural e ar fresco da ilha.</p>
           <div class="bedroom-icons">
-            <span class="bedroom-icon-item"><i data-lucide="bed-single"></i> <span data-lang="nl">2× eenpersoonsbed</span><span data-lang="en">2× single bed</span><span data-lang="pt">2× cama individual</span></span>
+            <span class="bedroom-icon-item"><i data-lucide="bed-single"></i> <span data-lang="nl">2× eenpersoonsbed (190×90)</span><span data-lang="en">2× single bed (190×90)</span><span data-lang="pt">2× individual (190×90)</span></span>
             <span class="bedroom-icon-item"><i data-lucide="archive"></i> <span data-lang="nl">Hangkast</span><span data-lang="en">Wardrobe</span><span data-lang="pt">Roupeiro</span></span>
           </div>
         </div>
       </div>
+
+      <!-- Slaapkamer 2 -->
       <div class="bedroom-card reveal">
         <div class="bedroom-card-img" style="position:relative;">
-          <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/1d1818e7-3a73-4757-be97-e8a140045fe1.jpeg" alt="Slaapkamer 2" loading="lazy" />
+          <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/1d1818e7-3a73-4757-be97-e8a140045fe1.jpeg" alt="Slaapkamer 2 – stapelbed en eenpersoonsbed" loading="lazy" />
+          <span class="bedroom-capacity">
+            <i data-lucide="users" style="width:12px;height:12px;"></i>
+            <span data-lang="nl">3 personen</span><span data-lang="en">3 guests</span><span data-lang="pt">3 pessoas</span>
+          </span>
         </div>
         <div class="bedroom-info">
           <h3 data-lang="nl">Slaapkamer 2</h3><h3 data-lang="en">Bedroom 2</h3><h3 data-lang="pt">Quarto 2</h3>
-          <p data-lang="nl">Eén los bed en een stapelbed met kast. Deuren naar de woonkamer.</p>
-          <p data-lang="en">One single bed and one bunk bed with wardrobe. Doors to living room.</p>
-          <p data-lang="pt">Uma cama individual e uma beliche com armário. Portas para a sala.</p>
+          <p class="bedroom-intro" data-lang="nl">De perfecte kinderkamer, met ruimte voor drie slapers en een directe verbinding met de woonkamer.</p>
+          <p class="bedroom-intro" data-lang="en">The perfect family room — sleeps three and connects directly to the living room.</p>
+          <p class="bedroom-intro" data-lang="pt">O quarto ideal para família — dorme três e liga diretamente à sala de estar.</p>
+          <p class="bedroom-desc" data-lang="nl">Één losstaand eenpersoonsbed én een stapelbed, met kast en eigen kledingopbergruimte. De glazen schuifdeuren naar de woonkamer zorgen voor verbinding én privacy naar keuze.</p>
+          <p class="bedroom-desc" data-lang="en">One single bed plus a bunk bed, wardrobe and dedicated storage. Sliding glass doors to the living room offer connection and privacy on demand.</p>
+          <p class="bedroom-desc" data-lang="pt">Uma cama individual mais uma beliche, com armário e espaço de arrumação. Portas deslizantes para a sala permitem ligação e privacidade conforme desejado.</p>
           <div class="bedroom-icons">
             <span class="bedroom-icon-item"><i data-lucide="bed-single"></i> <span data-lang="nl">1× eenpersoonsbed</span><span data-lang="en">1× single bed</span><span data-lang="pt">1× individual</span></span>
             <span class="bedroom-icon-item"><i data-lucide="layers"></i> <span data-lang="nl">1× stapelbed</span><span data-lang="en">1× bunk bed</span><span data-lang="pt">1× beliche</span></span>
+            <span class="bedroom-icon-item"><i data-lucide="door-open"></i> <span data-lang="nl">Schuifdeuren woonkamer</span><span data-lang="en">Doors to living room</span><span data-lang="pt">Portas para a sala</span></span>
           </div>
         </div>
       </div>
+
+      <!-- Slaapkamer 3 -->
       <div class="bedroom-card reveal">
         <div class="bedroom-card-img" style="position:relative;">
-          <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/031931e9-6be8-473f-b9e3-513dd8759757.jpeg" alt="Slaapkamer 3" loading="lazy" />
+          <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/031931e9-6be8-473f-b9e3-513dd8759757.jpeg" alt="Slaapkamer 3 – masterbed met en-suite badkamer" loading="lazy" />
           <span class="badge-ensuite">En-suite</span>
+          <span class="bedroom-capacity" style="right:auto;left:0.8rem;">
+            <i data-lucide="users" style="width:12px;height:12px;"></i>
+            <span data-lang="nl">2 personen</span><span data-lang="en">2 guests</span><span data-lang="pt">2 pessoas</span>
+          </span>
         </div>
         <div class="bedroom-info">
           <h3 data-lang="nl">Slaapkamer 3</h3><h3 data-lang="en">Bedroom 3</h3><h3 data-lang="pt">Quarto 3</h3>
-          <p data-lang="nl">Tweepersoonsbed met eigen badkamer (en-suite) met inloopdouche</p>
-          <p data-lang="en">Double bed with en-suite bathroom featuring a walk-in shower</p>
-          <p data-lang="pt">Cama de casal com casa de banho privativa (en-suite) com duche</p>
+          <p class="bedroom-intro" data-lang="nl">De masterkamer — uw eigen privéoase na een dag strand en Algarve-zon.</p>
+          <p class="bedroom-intro" data-lang="en">The master bedroom — your private retreat after a day on the beach and in the Algarve sun.</p>
+          <p class="bedroom-intro" data-lang="pt">O quarto principal — o seu refúgio privado após um dia de praia e sol algarvio.</p>
+          <p class="bedroom-desc" data-lang="nl">Ruim tweepersoonsbed, eigen badkamer met stijlvolle inloopdouche die u met niemand hoeft te delen. De meest ruime en serene kamer van de woning — voor wie echt tot rust wil komen.</p>
+          <p class="bedroom-desc" data-lang="en">Spacious double bed and a private en-suite bathroom with a sleek walk-in shower, entirely yours. The largest and most serene room in the house — for those who truly want to unwind.</p>
+          <p class="bedroom-desc" data-lang="pt">Cama de casal espaçosa e casa de banho privativa com duche walk-in elegante, só para si. O quarto mais amplo e sereno da casa — para quem quer mesmo descansar.</p>
           <div class="bedroom-icons">
             <span class="bedroom-icon-item"><i data-lucide="bed-double"></i> <span data-lang="nl">Tweepersoonsbed</span><span data-lang="en">Double bed</span><span data-lang="pt">Cama de casal</span></span>
-            <span class="bedroom-icon-item"><i data-lucide="shower-head"></i> <span data-lang="nl">Inloopdouche</span><span data-lang="en">Walk-in shower</span><span data-lang="pt">Duche</span></span>
+            <span class="bedroom-icon-item"><i data-lucide="shower-head"></i> <span data-lang="nl">En-suite inloopdouche</span><span data-lang="en">En-suite walk-in shower</span><span data-lang="pt">Duche en-suite</span></span>
           </div>
         </div>
       </div>
@@ -2593,7 +2645,21 @@
           </div>
         </div>
         <div class="contact-map">
-          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-7.715,37.015,-7.660,37.040&amp;layer=mapnik&amp;marker=37.027,-7.693" title="Ilha Armona kaart" loading="lazy"></iframe>
+          <iframe src="https://maps.google.com/maps?q=37.027,-7.693&z=15&output=embed" title="Ilha Armona – Casa das Árvores" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="map-links">
+          <a class="map-link" href="https://maps.google.com/maps?q=37.027,-7.693" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <span data-lang="nl">Open in Google Maps</span>
+            <span data-lang="en">Open in Google Maps</span>
+            <span data-lang="pt">Abrir no Google Maps</span>
+          </a>
+          <a class="map-link" href="https://www.aquabusferryboats.com/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.65 2.62.99 4 .99h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.14.52-.06.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/></svg>
+            <span data-lang="nl">Veertijden Olhão → Armona (Aquabus)</span>
+            <span data-lang="en">Ferry times Olhão → Armona (Aquabus)</span>
+            <span data-lang="pt">Horários de balsa Olhão → Armona (Aquabus)</span>
+          </a>
         </div>
       </div>
 
