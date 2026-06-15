@@ -1,0 +1,38 @@
+name: Scrape listing photos (temp)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch listing and extract photo URLs
+        run: |
+          set +e
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+          for URL in \
+            "https://www.airbnb.com/rooms/27625624" \
+            "https://www.airbnb.com/rooms/27625624?modal=PHOTO_TOUR_SCROLLABLE" \
+            "https://www.airbnb.nl/rooms/27625624"; do
+            echo "===== FETCHING: $URL ====="
+            code=$(curl -sS -L -A "$UA" \
+              -H "Accept-Language: nl,en;q=0.9" \
+              -H "Accept: text/html,application/xhtml+xml" \
+              -o page.html -w "%{http_code}" "$URL")
+            echo "HTTP $code, bytes: $(wc -c < page.html)"
+            echo "----- muscache image URLs found -----"
+            grep -oE 'https://a0\.muscache\.com/im/pictures/[^"\\ ]+\.(jpe?g|png|webp)' page.html \
+              | sed -E 's/\?.*$//' | sort -u
+            echo "----- end -----"
+          done
+
+          echo "===== TRY API v3 (public key) ====="
+          KEY="d306zoyjsyarp7ifhu67rjxn52tv0t20"
+          ID_B64=$(printf 'StayListing:27625624' | base64)
+          API="https://www.airbnb.com/api/v3/StaysPdpSections?operationName=StaysPdpSections&variables=%7B%22id%22%3A%22${ID_B64}%22%2C%22pdpSectionsRequest%22%3A%7B%22adults%22%3A%221%22%2C%22layouts%22%3A%5B%22SIDEBAR%22%2C%22SINGLE_COLUMN%22%5D%7D%7D&extensions=%7B%7D"
+          curl -sS -A "$UA" -H "X-Airbnb-API-Key: $KEY" -o api.json -w "API HTTP %{http_code}\n" "$API"
+          echo "bytes: $(wc -c < api.json)"
+          grep -oE 'https://a0\.muscache\.com/im/pictures/[^"\\ ]+' api.json \
+            | sed -E 's/\\u002F/\//g; s/\?.*$//' | sort -u
+          echo "===== DONE ====="
