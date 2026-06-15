@@ -1,0 +1,61 @@
+name: Update Airbnb availability
+
+# Haalt de Airbnb-agenda server-side op (geen CORS) en schrijft calendar.ics
+# naast de site, zodat de kalender op casadasarvores.com altijd snel en
+# betrouwbaar laadt.
+
+on:
+  schedule:
+    - cron: '17 */2 * * *'   # elke 2 uur
+  workflow_dispatch:          # handmatig te starten via de Actions-tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-availability
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch Airbnb iCal
+        run: |
+          set -e
+          URL="https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337"
+          ok=0
+          for i in 1 2 3 4 5; do
+            if curl -fsSL -A "Mozilla/5.0 (compatible; CasaDasArvoresBot/1.0)" "$URL" -o raw.ics; then
+              if grep -q "BEGIN:VCALENDAR" raw.ics; then
+                ok=1
+                echo "Fetched valid iCal on attempt $i"
+                break
+              fi
+            fi
+            echo "Attempt $i failed, retrying in 15s..."
+            sleep 15
+          done
+          if [ "$ok" != "1" ]; then
+            echo "::error::Could not fetch a valid iCal from Airbnb after 5 attempts"
+            exit 1
+          fi
+          # Verwijder de volatiele DTSTAMP-regels zodat we alleen committen bij
+          # echte boekingswijzigingen (anders elke run een nutteloze commit).
+          grep -v '^DTSTAMP' raw.ics > calendar.ics
+          rm -f raw.ics
+
+      - name: Commit if changed
+        run: |
+          git add calendar.ics
+          if git diff --cached --quiet; then
+            echo "Geen wijzigingen in de agenda."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update Airbnb availability calendar"
+          git push
