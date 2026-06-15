@@ -1,4 +1,4 @@
-name: Scrape Airbnb reviews (shell only)
+name: Scrape Airbnb reviews (API v2)
 
 on:
   workflow_dispatch:
@@ -7,38 +7,37 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Fetch and extract reviews
+      - name: Try Airbnb reviews API
         run: |
           set +e
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-          curl -sS -L -A "$UA" -H "Accept-Language: nl,en;q=0.9" -o page.html "https://www.airbnb.com/rooms/27625624"
-          echo "Page size: $(wc -c < page.html) bytes"
 
-          echo "=== REVIEW-RELATED KEYS ==="
-          grep -oP '"[a-zA-Z]{1,20}[Rr]eview[a-zA-Z]{0,20}":' page.html | sort -u | head -30
+          echo "=== TRY V2 REVIEWS API ==="
+          curl -sS -A "$UA" \
+            -H "Accept: application/json" \
+            -H "Accept-Language: nl,en;q=0.9" \
+            -H "X-Airbnb-API-Key: d306zoyjsyarp7ifhu67rjxn52tv0t20" \
+            "https://www.airbnb.com/api/v2/reviews?listing_id=27625624&sort_direction=DESC&page=1&count=7&_format=for_mobile_client" \
+            | head -c 8000
 
-          echo "=== ALL LOCALIZED STRINGS ==="
-          grep -oP '"localized[A-Za-z]+":"[^"]{3,50}"' page.html | sort -u | head -20
+          echo ""
+          echo "=== TRY PAGINATED REVIEWS ==="
+          curl -sS -A "$UA" \
+            -H "Accept: application/json" \
+            -H "X-Airbnb-API-Key: d306zoyjsyarp7ifhu67rjxn52tv0t20" \
+            "https://www.airbnb.com/api/v2/homes_pdp_sections?listing_id=27625624&api_version=1.9.4&sections[]=REVIEWS" \
+            | head -c 5000
 
-          echo "=== COMMENT/BODY KEYS ==="
-          grep -oP '"(body|text|content|message|comment)[A-Za-z]*":"[^"]{20,200}"' page.html | head -10 | cut -c1-200
-
-          echo "=== RATING VALUES ==="
-          grep -oP '"(overallRating|starRating|guestRating|rating)":([0-9.]+)' page.html | sort -u | head -20
-
-          echo "=== EXTRACT __NEXT_DATA__ SIZE AND KEYS ==="
-          grep -oP '(?<=__NEXT_DATA__" type="application/json">)[^<]+' page.html | head -c 50000 | \
-            jq -r 'paths | select(length == 1) | .[]' 2>/dev/null | head -30
-
-          echo "=== TRY AIRBNB API REVIEWS ==="
+          echo ""
+          echo "=== TRY V3 GRAPHQL WITH CORRECT FORMAT ==="
+          ID_B64=$(printf 'StayListing:27625624' | base64 -w 0)
           curl -sS -A "$UA" \
             -H "X-Airbnb-API-Key: d306zoyjsyarp7ifhu67rjxn52tv0t20" \
             -H "Content-Type: application/json" \
-            "https://www.airbnb.com/api/v3/StaysPdpReviewsQuery?operationName=StaysPdpReviewsQuery&variables=%7B%22id%22%3A%2227625624%22%2C%22request%22%3A%7B%22fieldSelector%22%3A%22for_p3%22%2C%22limit%22%3A7%2C%22offset%22%3A0%7D%7D&extensions=%7B%7D" \
-            | head -c 5000
+            -X POST \
+            -d "{\"operationName\":\"StaysPdpSections\",\"variables\":{\"id\":\"$ID_B64\",\"pdpSectionsRequest\":{\"adults\":\"2\",\"layouts\":[\"SINGLE_COLUMN\"],\"sections\":[\"REVIEWS\"]}},\"extensions\":{}}" \
+            "https://www.airbnb.com/api/v3/StaysPdpSections?operationName=StaysPdpSections" \
+            | head -c 8000
 
           echo ""
           echo "=== DONE ==="
