@@ -1480,6 +1480,14 @@
     .cal-link-hint a { font-size: 0.7rem; color: var(--gold); text-decoration: none; letter-spacing: 0.06em; border-bottom: 1px solid var(--border-gold); padding-bottom: 1px; transition: color 0.2s; }
     .cal-link-hint a:hover { color: var(--gold-light); }
 
+    /* read-only reisgegevens-samenvatting in contactformulier */
+    .booking-recap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border-gold); border: 1px solid var(--border-gold); border-radius: 4px; overflow: hidden; }
+    .recap-cell { display: flex; flex-direction: column; gap: 0.3rem; padding: 0.7rem 0.85rem; background: var(--warm-white); }
+    .recap-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    .recap-value { font-size: 0.95rem; color: var(--navy); font-weight: 500; }
+    .recap-value.placeholder { color: var(--text-light); font-weight: 400; }
+    @media (max-width: 480px) { .booking-recap { grid-template-columns: 1fr; } }
+
     @media (max-width: 768px) {
       .guest-stepper { gap: 0.7rem; }
     }
@@ -2317,33 +2325,34 @@
           </div>
         </div>
 
-        <!-- Aankomst + vertrek -->
-        <div class="form-row">
-          <div class="form-group">
-            <label data-lang="nl">Aankomstdatum</label>
-            <label data-lang="en">Check-in date</label>
-            <label data-lang="pt">Data de chegada</label>
-            <input type="date" name="aankomst" id="formCheckin">
-          </div>
-          <div class="form-group">
-            <label data-lang="nl">Vertrekdatum</label>
-            <label data-lang="en">Check-out date</label>
-            <label data-lang="pt">Data de partida</label>
-            <input type="date" name="vertrek" id="formCheckout">
-          </div>
-        </div>
-        <div class="cal-link-hint">
-          <a href="#beschikbaarheid" data-lang="nl" onclick="event.preventDefault();document.getElementById('beschikbaarheid').scrollIntoView({behavior:'smooth'});">← Kies je datums in de kalender hierboven</a>
-          <a href="#beschikbaarheid" data-lang="en" onclick="event.preventDefault();document.getElementById('beschikbaarheid').scrollIntoView({behavior:'smooth'});">← Pick your dates in the calendar above</a>
-          <a href="#beschikbaarheid" data-lang="pt" onclick="event.preventDefault();document.getElementById('beschikbaarheid').scrollIntoView({behavior:'smooth'});">← Escolha as datas no calendário acima</a>
-        </div>
-
-        <!-- Personen -->
+        <!-- Reisgegevens: read-only samenvatting vanuit de kalender hierboven -->
         <div class="form-group">
-          <label data-lang="nl">Aantal personen</label>
-          <label data-lang="en">Number of guests</label>
-          <label data-lang="pt">Número de pessoas</label>
-          <input type="number" name="personen" id="formPersons" min="1" max="6" value="2">
+          <label data-lang="nl">Jouw reisgegevens</label>
+          <label data-lang="en">Your trip details</label>
+          <label data-lang="pt">Os seus dados de viagem</label>
+          <div class="booking-recap" id="bookingRecap">
+            <div class="recap-cell">
+              <span class="recap-label"><span data-lang="nl">Aankomst</span><span data-lang="en">Check-in</span><span data-lang="pt">Check-in</span></span>
+              <span class="recap-value placeholder" id="recapCheckin"><span data-lang="nl">—</span><span data-lang="en">—</span><span data-lang="pt">—</span></span>
+            </div>
+            <div class="recap-cell">
+              <span class="recap-label"><span data-lang="nl">Vertrek</span><span data-lang="en">Check-out</span><span data-lang="pt">Check-out</span></span>
+              <span class="recap-value placeholder" id="recapCheckout"><span data-lang="nl">—</span><span data-lang="en">—</span><span data-lang="pt">—</span></span>
+            </div>
+            <div class="recap-cell">
+              <span class="recap-label"><span data-lang="nl">Gasten</span><span data-lang="en">Guests</span><span data-lang="pt">Hóspedes</span></span>
+              <span class="recap-value" id="recapGuests">2</span>
+            </div>
+          </div>
+          <p class="cal-link-hint">
+            <a href="#beschikbaarheid" data-lang="nl" onclick="event.preventDefault();document.getElementById('beschikbaarheid').scrollIntoView({behavior:'smooth'});">↑ Pas datums of gasten aan in de kalender hierboven</a>
+            <a href="#beschikbaarheid" data-lang="en" onclick="event.preventDefault();document.getElementById('beschikbaarheid').scrollIntoView({behavior:'smooth'});">↑ Adjust dates or guests in the calendar above</a>
+            <a href="#beschikbaarheid" data-lang="pt" onclick="event.preventDefault();document.getElementById('beschikbaarheid').scrollIntoView({behavior:'smooth'});">↑ Ajuste as datas ou hóspedes no calendário acima</a>
+          </p>
+          <!-- verborgen velden, gevuld vanuit de kalender -->
+          <input type="hidden" name="aankomst" id="formCheckin">
+          <input type="hidden" name="vertrek" id="formCheckout">
+          <input type="hidden" name="personen" id="formPersons" value="2">
         </div>
 
         <!-- Bericht -->
@@ -2940,13 +2949,28 @@
     const btn = document.getElementById('wizardBookBtn');
     if (btn) btn.href = buildAirbnbUrl();
 
-    // live-sync dates/guests into contact form
+    // live-sync dates/guests into contact form (hidden inputs + read-only recap)
+    const guests = (sel.adults || 2) + (sel.children || 0);
     const fci = document.getElementById('formCheckin');
     const fco = document.getElementById('formCheckout');
     const fps = document.getElementById('formPersons');
     if (fci) fci.value = sel.checkin || '';
     if (fco) fco.value = sel.checkout || '';
-    if (fps) fps.value = (sel.adults || 2) + (sel.children || 0);
+    if (fps) fps.value = guests;
+
+    const rci = document.getElementById('recapCheckin');
+    const rco = document.getElementById('recapCheckout');
+    const rg  = document.getElementById('recapGuests');
+    const dash = `<span data-lang="nl">—</span><span data-lang="en">—</span><span data-lang="pt">—</span>`;
+    if (rci) {
+      if (sel.checkin) { rci.textContent = formatDate(sel.checkin, lang); rci.classList.remove('placeholder'); }
+      else { rci.innerHTML = dash; rci.classList.add('placeholder'); }
+    }
+    if (rco) {
+      if (sel.checkout) { rco.textContent = formatDate(sel.checkout, lang); rco.classList.remove('placeholder'); }
+      else { rco.innerHTML = dash; rco.classList.add('placeholder'); }
+    }
+    if (rg) rg.textContent = guests;
   }
 
   // ── LIGHTBOX ──
