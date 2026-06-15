@@ -1,4 +1,4 @@
-name: Scrape Airbnb reviews (deep)
+name: Scrape Airbnb reviews (shell only)
 
 on:
   workflow_dispatch:
@@ -7,54 +7,38 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Fetch and extract reviews
         run: |
           set +e
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
           curl -sS -L -A "$UA" -H "Accept-Language: nl,en;q=0.9" -o page.html "https://www.airbnb.com/rooms/27625624"
-          echo "Size: $(wc -c < page.html) bytes"
-          echo "=== SEARCHING FOR REVIEW-RELATED KEYS ==="
-          grep -oP '"[a-zA-Z]*[Rr]eview[a-zA-Z]*":' page.html | sort -u | head -30
-          echo "=== SEARCH FOR COMMENT-RELATED KEYS ==="
-          grep -oP '"[a-zA-Z]*[Cc]omment[a-zA-Z]*":' page.html | sort -u | head -20
-          echo "=== SEARCH DATE KEYS ==="
-          grep -oP '"[a-zA-Z]*[Dd]ate[a-zA-Z]*":' page.html | sort -u | head -20
-          echo "=== ANY STAR RATINGS ==="
-          grep -oP '"[a-zA-Z]*[Ss]tar[a-zA-Z]*":[0-9]' page.html | sort -u | head -20
-          echo "=== REVIEWER PATTERN VARIANTS ==="
-          grep -oP '"reviewer[A-Za-z]*":"[^"]{2,40}"' page.html | head -10
-          grep -oP '"author[^"]*":"[^"]{2,40}"' page.html | head -10
-          echo "=== LOOK FOR LOCALIZED DATE ==="
-          grep -oP '"localized[A-Za-z]*":"[^"]{3,30}"' page.html | head -20
-          echo "=== LOOK FOR PAGINATION / REVIEW COUNT ==="
-          grep -oP '"reviewCount":[0-9]+' page.html | head -5
-          grep -oP '"totalCount":[0-9]+' page.html | head -5
-          echo "=== CHECK IF REVIEWS IN NEXT_DATA ==="
-          python3 -c "
-import re, json
-html = open('page.html').read()
-m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
-if m:
-    print('Found __NEXT_DATA__, size:', len(m.group(1)))
-    data = json.loads(m.group(1))
-    # Print all top-level keys recursively up to depth 3
-    def keys_at(obj, depth=0, prefix=''):
-        if depth > 3: return
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                if any(x in k.lower() for x in ['review','comment','guest','rating','star','author']):
-                    print(prefix + k + ': ' + repr(v)[:100])
-                else:
-                    keys_at(v, depth+1, prefix + k + '.')
-        elif isinstance(obj, list) and len(obj) > 0:
-            keys_at(obj[0], depth+1, prefix + '[0].')
-    keys_at(data)
-else:
-    print('No __NEXT_DATA__ found')
-    # Check if there is any JSON in script tags
-    scripts = re.findall(r'<script[^>]*>(.*?)</script>', html, re.DOTALL)
-    print(f'Found {len(scripts)} script tags')
-    for i, s in enumerate(scripts[:5]):
-        print(f'Script {i}: {len(s)} chars, starts: {s[:80].strip()}')
-"
+          echo "Page size: $(wc -c < page.html) bytes"
+
+          echo "=== REVIEW-RELATED KEYS ==="
+          grep -oP '"[a-zA-Z]{1,20}[Rr]eview[a-zA-Z]{0,20}":' page.html | sort -u | head -30
+
+          echo "=== ALL LOCALIZED STRINGS ==="
+          grep -oP '"localized[A-Za-z]+":"[^"]{3,50}"' page.html | sort -u | head -20
+
+          echo "=== COMMENT/BODY KEYS ==="
+          grep -oP '"(body|text|content|message|comment)[A-Za-z]*":"[^"]{20,200}"' page.html | head -10 | cut -c1-200
+
+          echo "=== RATING VALUES ==="
+          grep -oP '"(overallRating|starRating|guestRating|rating)":([0-9.]+)' page.html | sort -u | head -20
+
+          echo "=== EXTRACT __NEXT_DATA__ SIZE AND KEYS ==="
+          grep -oP '(?<=__NEXT_DATA__" type="application/json">)[^<]+' page.html | head -c 50000 | \
+            jq -r 'paths | select(length == 1) | .[]' 2>/dev/null | head -30
+
+          echo "=== TRY AIRBNB API REVIEWS ==="
+          curl -sS -A "$UA" \
+            -H "X-Airbnb-API-Key: d306zoyjsyarp7ifhu67rjxn52tv0t20" \
+            -H "Content-Type: application/json" \
+            "https://www.airbnb.com/api/v3/StaysPdpReviewsQuery?operationName=StaysPdpReviewsQuery&variables=%7B%22id%22%3A%2227625624%22%2C%22request%22%3A%7B%22fieldSelector%22%3A%22for_p3%22%2C%22limit%22%3A7%2C%22offset%22%3A0%7D%7D&extensions=%7B%7D" \
+            | head -c 5000
+
+          echo ""
           echo "=== DONE ==="
