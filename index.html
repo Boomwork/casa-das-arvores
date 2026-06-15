@@ -1373,6 +1373,106 @@
     }
     .cal-retry-btn:hover { background: var(--gold); color: white; }
 
+    /* ── BOOKING WIZARD ── */
+    /* clickable calendar days */
+    .cal-day.available { cursor: pointer; }
+    .cal-day.available:hover { background: rgba(255,255,255,0.08); }
+    .cal-day.range-start, .cal-day.range-end {
+      background: var(--gold) !important;
+      color: #fff !important;
+      font-weight: 500;
+      border-radius: 4px;
+    }
+    .cal-day.in-range {
+      background: rgba(184,150,90,0.18);
+      color: #fff;
+    }
+    .cal-day.range-start { border-radius: 4px 0 0 4px; }
+    .cal-day.range-end { border-radius: 0 4px 4px 0; }
+    .cal-day.range-disabled { opacity: 0.28; pointer-events: none; }
+
+    .wizard { display: flex; flex-direction: column; gap: 1.4rem; }
+    .wizard-step-label {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold-light); margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .wizard-step-label .step-num {
+      width: 18px; height: 18px; border-radius: 50%; background: var(--gold);
+      color: #fff; font-size: 0.62rem; display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* guest picker */
+    .guest-rows { display: flex; flex-direction: column; gap: 0.9rem; }
+    .guest-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.1rem; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .guest-row-label { display: flex; flex-direction: column; gap: 0.15rem; }
+    .guest-row-label .g-title { font-size: 0.88rem; color: rgba(255,255,255,0.9); }
+    .guest-row-label .g-sub { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+    .guest-stepper { display: flex; align-items: center; gap: 0.9rem; }
+    .g-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: none; border: 1px solid var(--gold);
+      color: var(--gold-light); font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; line-height: 1; padding: 0;
+    }
+    .g-btn:hover:not(:disabled) { background: var(--gold); color: #fff; }
+    .g-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+    .g-count { min-width: 18px; text-align: center; font-size: 0.95rem; color: #fff; }
+
+    /* date summary */
+    .date-summary {
+      display: flex; gap: 1px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .date-cell {
+      flex: 1; padding: 0.85rem 1rem; background: rgba(255,255,255,0.04);
+    }
+    .date-cell .d-label { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+    .date-cell .d-value { font-size: 0.92rem; color: #fff; }
+    .date-cell .d-value.placeholder { color: rgba(255,255,255,0.3); }
+    .date-reset {
+      background: none; border: none; color: var(--gold-light);
+      font-size: 0.7rem; letter-spacing: 0.08em; cursor: pointer;
+      text-decoration: underline; margin-top: 0.5rem; padding: 0; align-self: flex-start;
+    }
+    .date-hint { font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.6; margin-top: 0.4rem; }
+    .date-hint.warn { color: #e0a96d; }
+
+    /* price card */
+    .price-card {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border-gold);
+      padding: 1.6rem; overflow: hidden;
+      max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0;
+      transition: max-height 0.45s ease, opacity 0.4s ease, padding 0.45s ease;
+    }
+    .price-card.show { max-height: 600px; opacity: 1; padding-top: 1.6rem; padding-bottom: 1.6rem; }
+    .price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+    .price-row .p-calc { border-bottom: 1px dotted rgba(255,255,255,0.25); cursor: help; }
+    .price-row.fee { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+    .price-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 1rem 0; }
+    .price-total { display: flex; justify-content: space-between; align-items: baseline; }
+    .price-total .pt-label { font-size: 0.78rem; letter-spacing: 0.06em; color: rgba(255,255,255,0.9); }
+    .price-total .pt-value { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; color: var(--gold-light); }
+    .price-disclaimer { font-size: 0.68rem; color: rgba(255,255,255,0.35); line-height: 1.6; margin-top: 1rem; font-style: italic; }
+    .wizard-book-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      width: 100%; padding: 1rem; margin-top: 1.2rem;
+      background: var(--gold); color: #fff; text-decoration: none;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      transition: all 0.3s; border: none; cursor: pointer;
+    }
+    .wizard-book-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .wizard-book-btn.disabled { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.3); pointer-events: none; transform: none; }
+
+    @media (max-width: 768px) {
+      .guest-stepper { gap: 0.7rem; }
+    }
+
     /* ── AIRBNB LOGO ── */
     .airbnb-logo { width: 20px; height: 20px; flex-shrink: 0; }
 
@@ -1940,30 +2040,109 @@
         <p class="cal-loading" id="cal-status" style="margin-top:1rem;"></p>
       </div>
       <div class="cal-info">
-        <p data-lang="nl">De kalender is rechtstreeks gekoppeld aan de Airbnb-agenda. Bezette dagen zijn up-to-date vanuit de actuele reserveringen op Airbnb.</p>
-        <p data-lang="en">The calendar is directly linked to the Airbnb agenda. Booked dates are kept up to date from current reservations on Airbnb.</p>
-        <p data-lang="pt">O calendário está ligado diretamente à agenda do Airbnb. As datas reservadas são atualizadas em tempo real.</p>
-        <br/>
-        <p data-lang="nl"><i data-lucide="clock" style="width:14px;height:14px;stroke:var(--gold-light);vertical-align:middle;margin-right:4px;"></i><strong>Aankomst:</strong> vanaf 15:00 &nbsp;·&nbsp; <strong>Vertrek:</strong> voor 10:00 &nbsp;·&nbsp; <strong>Max.:</strong> 6 personen</p>
-        <p data-lang="en"><i data-lucide="clock" style="width:14px;height:14px;stroke:var(--gold-light);vertical-align:middle;margin-right:4px;"></i><strong>Check-in:</strong> from 15:00 &nbsp;·&nbsp; <strong>Check-out:</strong> before 10:00 &nbsp;·&nbsp; <strong>Max.:</strong> 6 persons</p>
-        <p data-lang="pt"><i data-lucide="clock" style="width:14px;height:14px;stroke:var(--gold-light);vertical-align:middle;margin-right:4px;"></i><strong>Check-in:</strong> 15:00 &nbsp;·&nbsp; <strong>Check-out:</strong> 10:00 &nbsp;·&nbsp; <strong>Máx.:</strong> 6 pessoas</p>
-        <div class="cal-next-avail" id="calNextAvail" style="display:none;"><i data-lucide="calendar-check"></i><span id="calNextAvailText"></span></div>
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="book-btn" data-lang="nl">
-          <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-          Boek via Airbnb
-        </a>
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="book-btn" data-lang="en">
-          <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-          Book via Airbnb
-        </a>
-        <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="book-btn" data-lang="pt">
-          <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-          Reservar via Airbnb
-        </a>
-        <div style="margin-top:0.8rem;">
-          <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);" data-lang="nl">Bekijk actuele prijs op Airbnb →</a>
-          <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);" data-lang="en">View current price on Airbnb →</a>
-          <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);" data-lang="pt">Ver preço atual no Airbnb →</a>
+        <div class="wizard">
+          <!-- STEP 1: guests -->
+          <div>
+            <div class="wizard-step-label">
+              <span class="step-num">1</span>
+              <span data-lang="nl">Aantal gasten</span><span data-lang="en">Number of guests</span><span data-lang="pt">Número de hóspedes</span>
+            </div>
+            <div class="guest-rows">
+              <div class="guest-row">
+                <div class="guest-row-label">
+                  <span class="g-title"><span data-lang="nl">Volwassenen</span><span data-lang="en">Adults</span><span data-lang="pt">Adultos</span></span>
+                  <span class="g-sub"><span data-lang="nl">13 jaar en ouder</span><span data-lang="en">Age 13+</span><span data-lang="pt">13 anos ou mais</span></span>
+                </div>
+                <div class="guest-stepper">
+                  <button class="g-btn" id="adultsMinus" onclick="changeGuests('adults',-1)" aria-label="−">−</button>
+                  <span class="g-count" id="adultsCount">2</span>
+                  <button class="g-btn" id="adultsPlus" onclick="changeGuests('adults',1)" aria-label="+">+</button>
+                </div>
+              </div>
+              <div class="guest-row">
+                <div class="guest-row-label">
+                  <span class="g-title"><span data-lang="nl">Kinderen</span><span data-lang="en">Children</span><span data-lang="pt">Crianças</span></span>
+                  <span class="g-sub"><span data-lang="nl">2 t/m 12 jaar</span><span data-lang="en">Ages 2–12</span><span data-lang="pt">2 a 12 anos</span></span>
+                </div>
+                <div class="guest-stepper">
+                  <button class="g-btn" id="childrenMinus" onclick="changeGuests('children',-1)" aria-label="−">−</button>
+                  <span class="g-count" id="childrenCount">0</span>
+                  <button class="g-btn" id="childrenPlus" onclick="changeGuests('children',1)" aria-label="+">+</button>
+                </div>
+              </div>
+            </div>
+            <p class="date-hint" id="guestMaxHint" style="display:none;">
+              <span data-lang="nl">Maximaal 6 gasten in totaal.</span><span data-lang="en">Maximum 6 guests in total.</span><span data-lang="pt">Máximo de 6 hóspedes no total.</span>
+            </p>
+          </div>
+
+          <!-- STEP 2: dates -->
+          <div>
+            <div class="wizard-step-label">
+              <span class="step-num">2</span>
+              <span data-lang="nl">Kies je datums in de kalender</span><span data-lang="en">Pick your dates in the calendar</span><span data-lang="pt">Escolha as suas datas no calendário</span>
+            </div>
+            <div class="date-summary">
+              <div class="date-cell">
+                <div class="d-label"><span data-lang="nl">Aankomst</span><span data-lang="en">Check-in</span><span data-lang="pt">Check-in</span></div>
+                <div class="d-value placeholder" id="checkinDisplay">
+                  <span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>
+                </div>
+              </div>
+              <div class="date-cell">
+                <div class="d-label"><span data-lang="nl">Vertrek</span><span data-lang="en">Check-out</span><span data-lang="pt">Check-out</span></div>
+                <div class="d-value placeholder" id="checkoutDisplay">
+                  <span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>
+                </div>
+              </div>
+            </div>
+            <p class="date-hint" id="dateHint">
+              <span data-lang="nl">Klik eerst op je aankomstdag, daarna op je vertrekdag. Minimaal 2 nachten.</span>
+              <span data-lang="en">Click your arrival day first, then your departure day. Minimum 2 nights.</span>
+              <span data-lang="pt">Clique primeiro no dia de chegada, depois no de partida. Mínimo 2 noites.</span>
+            </p>
+            <button class="date-reset" id="dateReset" onclick="resetDates()" style="display:none;">
+              <span data-lang="nl">Wis selectie</span><span data-lang="en">Clear selection</span><span data-lang="pt">Limpar seleção</span>
+            </button>
+          </div>
+
+          <!-- STEP 3: price -->
+          <div class="price-card" id="priceCard">
+            <div class="price-row">
+              <span class="p-calc" id="priceNightsLabel">€ 0 × 0</span>
+              <span id="priceNightsTotal">€ 0</span>
+            </div>
+            <div class="price-row">
+              <span><span data-lang="nl">Schoonmaakkosten</span><span data-lang="en">Cleaning fee</span><span data-lang="pt">Taxa de limpeza</span></span>
+              <span id="priceCleaning">€ 0</span>
+            </div>
+            <div class="price-row fee">
+              <span class="p-calc" title="Berekend en geïnd door Airbnb" id="priceServiceLabel"><span data-lang="nl">Airbnb servicekosten (~14%)</span><span data-lang="en">Airbnb service fee (~14%)</span><span data-lang="pt">Taxa de serviço Airbnb (~14%)</span></span>
+              <span id="priceService">€ 0</span>
+            </div>
+            <div class="price-divider"></div>
+            <div class="price-total">
+              <span class="pt-label"><span data-lang="nl">Geschat totaal</span><span data-lang="en">Estimated total</span><span data-lang="pt">Total estimado</span></span>
+              <span class="pt-value" id="priceTotal">€ 0</span>
+            </div>
+            <p class="price-disclaimer">
+              <span data-lang="nl">Indicatieve prijs. De definitieve prijs incl. servicekosten zie je op Airbnb en kan variëren per seizoen en aanbieding.</span>
+              <span data-lang="en">Indicative price. The final price incl. service fees is shown on Airbnb and may vary by season and offers.</span>
+              <span data-lang="pt">Preço indicativo. O preço final com taxas é mostrado no Airbnb e pode variar por época e promoções.</span>
+            </p>
+            <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" class="wizard-book-btn" id="wizardBookBtn">
+              <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
+              <span data-lang="nl">Reserveer op Airbnb</span><span data-lang="en">Reserve on Airbnb</span><span data-lang="pt">Reservar no Airbnb</span>
+            </a>
+          </div>
+
+          <!-- check-in/out info -->
+          <p class="date-hint">
+            <span data-lang="nl"><strong style="color:rgba(255,255,255,0.7)">Aankomst</strong> vanaf 15:00 · <strong style="color:rgba(255,255,255,0.7)">Vertrek</strong> voor 10:00</span>
+            <span data-lang="en"><strong style="color:rgba(255,255,255,0.7)">Check-in</strong> from 15:00 · <strong style="color:rgba(255,255,255,0.7)">Check-out</strong> before 10:00</span>
+            <span data-lang="pt"><strong style="color:rgba(255,255,255,0.7)">Check-in</strong> a partir das 15:00 · <strong style="color:rgba(255,255,255,0.7)">Check-out</strong> antes das 10:00</span>
+          </p>
+          <div class="cal-next-avail" id="calNextAvail" style="display:none;"><i data-lucide="calendar-check"></i><span id="calNextAvailText"></span></div>
         </div>
       </div>
     </div>
@@ -2153,6 +2332,7 @@
     document.querySelectorAll(`.lang-btn[onclick="setLang('${lang}')"]`).forEach(b => b.classList.add('active'));
     renderCalendar();
     if (typeof computeNextAvailable === 'function') computeNextAvailable();
+    if (typeof updateWizard === 'function') updateWizard();
   }
   function currentLang() { return document.body.className.replace('lang-',''); }
 
@@ -2281,6 +2461,24 @@
   // ── CALENDAR ──
   let calYear, calMonth;
   let bookedDates = new Set();
+
+  // ── BOOKING WIZARD CONFIG ──
+  // Pas deze tarieven aan; Airbnb toont de definitieve prijs na doorklikken.
+  const PRICING = {
+    nightlyRate: 130,        // € per nacht (indicatief)
+    cleaningFee: 75,         // € eenmalig
+    serviceFeeRate: 0.14,    // ~14% Airbnb servicekosten (schatting)
+    minStay: 2,              // minimum aantal nachten
+    maxGuests: 6,
+  };
+  const ROOM_URL = 'https://www.airbnb.nl/rooms/27625624';
+  // wizard state (persists across language switches via sessionStorage)
+  let sel = { checkin: null, checkout: null, adults: 2, children: 0 };
+  try {
+    const saved = JSON.parse(sessionStorage.getItem('cda_booking') || 'null');
+    if (saved) sel = Object.assign(sel, saved);
+  } catch(e) {}
+  function saveSel() { try { sessionStorage.setItem('cda_booking', JSON.stringify(sel)); } catch(e) {} }
   const MONTH_NAMES = {
     nl: ['Januari','Februari','Maart','April','Mei','Juni','Juli','Augustus','September','Oktober','November','December'],
     en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
@@ -2299,6 +2497,7 @@
     calYear = now.getFullYear();
     calMonth = now.getMonth();
     showCalSkeleton();
+    updateWizard();
     loadIcal();
   }
 
@@ -2348,7 +2547,11 @@
           + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
       }
     }
+    // clear a saved selection that now conflicts with booked dates
+    if (sel.checkin && (bookedDates.has(sel.checkin) || sel.checkin < new Date().toISOString().slice(0,10))) { sel.checkin = null; sel.checkout = null; saveSel(); }
+    if (sel.checkin && sel.checkout && crossesBooked(sel.checkin, sel.checkout)) { sel.checkout = null; saveSel(); }
     renderCalendar();
+    updateWizard();
     if (loaded) computeNextAvailable();
   }
 
@@ -2397,13 +2600,37 @@
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const isPast = dateStr < nowStr;
-      const cls = ['cal-day',
-        isPast ? 'past' : (bookedDates.has(dateStr) ? 'booked' : 'available'),
-        dateStr === todayStr ? 'today' : ''
-      ].filter(Boolean).join(' ');
-      html += `<div class="${cls}">${d}</div>`;
+      const isBooked = bookedDates.has(dateStr);
+      const classes = ['cal-day'];
+      if (isPast) classes.push('past');
+      else if (isBooked) classes.push('booked');
+      else classes.push('available');
+      if (dateStr === todayStr) classes.push('today');
+      // range selection highlighting
+      if (sel.checkin && dateStr === sel.checkin) classes.push('range-start');
+      if (sel.checkout && dateStr === sel.checkout) classes.push('range-end');
+      if (sel.checkin && sel.checkout && dateStr > sel.checkin && dateStr < sel.checkout) classes.push('in-range');
+      // when picking checkout, disable days that would cross a booked night or are before checkin
+      if (sel.checkin && !sel.checkout && !isPast && !isBooked) {
+        if (dateStr <= sel.checkin || crossesBooked(sel.checkin, dateStr)) classes.push('range-disabled');
+      }
+      const clickable = !isPast && !isBooked;
+      const attr = clickable ? ` onclick="pickDate('${dateStr}')"` : '';
+      html += `<div class="${classes.join(' ')}" data-date="${dateStr}"${attr}>${d}</div>`;
     }
     grid.innerHTML = html;
+  }
+
+  // does the range [a,b) cover any booked night? (b is checkout, exclusive)
+  function crossesBooked(a, b) {
+    let cur = new Date(a + 'T00:00:00');
+    const end = new Date(b + 'T00:00:00');
+    cur.setDate(cur.getDate() + 1);
+    while (cur < end) {
+      if (bookedDates.has(cur.toISOString().slice(0,10))) return true;
+      cur.setDate(cur.getDate() + 1);
+    }
+    return false;
   }
 
   function renderCalendar(animate) {
@@ -2444,6 +2671,151 @@
 
   function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(true); }
   function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(true); }
+
+  // ── BOOKING WIZARD LOGIC ──
+  function changeGuests(type, delta) {
+    const total = sel.adults + sel.children;
+    if (delta > 0 && total >= PRICING.maxGuests) { flashGuestMax(); return; }
+    if (type === 'adults')   sel.adults   = Math.min(PRICING.maxGuests, Math.max(1, sel.adults + delta));
+    if (type === 'children') sel.children = Math.min(PRICING.maxGuests - 1, Math.max(0, sel.children + delta));
+    // keep total within max
+    while (sel.adults + sel.children > PRICING.maxGuests) {
+      if (type === 'adults' && sel.children > 0) sel.children--; else break;
+    }
+    saveSel();
+    updateWizard();
+  }
+  function flashGuestMax() {
+    const h = document.getElementById('guestMaxHint');
+    if (h) { h.style.display = 'block'; clearTimeout(h._t); h._t = setTimeout(() => h.style.display = 'none', 2500); }
+  }
+
+  function pickDate(dateStr) {
+    if (!sel.checkin || (sel.checkin && sel.checkout)) {
+      // start a new selection
+      sel.checkin = dateStr; sel.checkout = null;
+    } else {
+      // selecting checkout
+      if (dateStr <= sel.checkin) { sel.checkin = dateStr; sel.checkout = null; }
+      else if (crossesBooked(sel.checkin, dateStr)) { sel.checkin = dateStr; sel.checkout = null; }
+      else {
+        const nights = nightsBetween(sel.checkin, dateStr);
+        if (nights < PRICING.minStay) { showMinStayWarning(); return; }
+        sel.checkout = dateStr;
+      }
+    }
+    saveSel();
+    renderCalendar();
+    updateWizard();
+  }
+
+  function resetDates() {
+    sel.checkin = null; sel.checkout = null;
+    saveSel();
+    renderCalendar();
+    updateWizard();
+  }
+
+  function nightsBetween(a, b) {
+    return Math.round((new Date(b) - new Date(a)) / 86400000);
+  }
+
+  function showMinStayWarning() {
+    const lang = currentLang();
+    const h = document.getElementById('dateHint');
+    if (!h) return;
+    h.classList.add('warn');
+    h.dataset.warn = '1';
+    h.innerHTML = lang==='nl' ? `Minimaal ${PRICING.minStay} nachten verblijf.`
+                : lang==='en' ? `Minimum stay is ${PRICING.minStay} nights.`
+                : `Estadia mínima de ${PRICING.minStay} noites.`;
+    clearTimeout(h._t); h._t = setTimeout(() => { h.classList.remove('warn'); delete h.dataset.warn; updateWizard(); }, 2800);
+  }
+
+  function formatDate(dateStr, lang) {
+    const d = new Date(dateStr + 'T00:00:00');
+    const dayNames = {
+      nl: ['zo','ma','di','wo','do','vr','za'],
+      en: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      pt: ['dom','seg','ter','qua','qui','sex','sáb']
+    };
+    const dn = (dayNames[lang]||dayNames.nl)[d.getDay()];
+    const mn = (MONTH_NAMES[lang]||MONTH_NAMES.nl)[d.getMonth()].slice(0,3).toLowerCase();
+    return `${dn} ${d.getDate()} ${mn}`;
+  }
+
+  function fmtEuro(n) {
+    return '€ ' + n.toLocaleString('nl-NL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function buildAirbnbUrl() {
+    let url = ROOM_URL;
+    const params = [];
+    if (sel.checkin)  params.push('check_in='  + sel.checkin);
+    if (sel.checkout) params.push('check_out=' + sel.checkout);
+    params.push('adults=' + sel.adults);
+    if (sel.children > 0) params.push('children=' + sel.children);
+    params.push('guests=' + (sel.adults + sel.children));
+    return url + (params.length ? '?' + params.join('&') : '');
+  }
+
+  function updateWizard() {
+    const lang = currentLang();
+    // guest counts
+    const ac = document.getElementById('adultsCount'); if (ac) ac.textContent = sel.adults;
+    const cc = document.getElementById('childrenCount'); if (cc) cc.textContent = sel.children;
+    const total = sel.adults + sel.children;
+    const atMax = total >= PRICING.maxGuests;
+    const ap = document.getElementById('adultsPlus'); if (ap) ap.disabled = atMax;
+    const cp = document.getElementById('childrenPlus'); if (cp) cp.disabled = atMax || sel.children >= PRICING.maxGuests - 1;
+    const am = document.getElementById('adultsMinus'); if (am) am.disabled = sel.adults <= 1;
+    const cm = document.getElementById('childrenMinus'); if (cm) cm.disabled = sel.children <= 0;
+
+    // date displays
+    const ci = document.getElementById('checkinDisplay');
+    const co = document.getElementById('checkoutDisplay');
+    if (ci) {
+      if (sel.checkin) { ci.textContent = formatDate(sel.checkin, lang); ci.classList.remove('placeholder'); }
+      else { ci.innerHTML = `<span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>`; ci.classList.add('placeholder'); }
+    }
+    if (co) {
+      if (sel.checkout) { co.textContent = formatDate(sel.checkout, lang); co.classList.remove('placeholder'); }
+      else { co.innerHTML = `<span data-lang="nl">Selecteer</span><span data-lang="en">Select</span><span data-lang="pt">Selecionar</span>`; co.classList.add('placeholder'); }
+    }
+    const reset = document.getElementById('dateReset');
+    if (reset) reset.style.display = (sel.checkin || sel.checkout) ? 'block' : 'none';
+
+    // hint (skip if warning is showing)
+    const hint = document.getElementById('dateHint');
+    if (hint && !hint.dataset.warn) {
+      hint.classList.remove('warn');
+      if (!sel.checkin) hint.innerHTML = `<span data-lang="nl">Klik eerst op je aankomstdag, daarna op je vertrekdag. Minimaal 2 nachten.</span><span data-lang="en">Click your arrival day first, then your departure day. Minimum 2 nights.</span><span data-lang="pt">Clique primeiro no dia de chegada, depois no de partida. Mínimo 2 noites.</span>`;
+      else if (!sel.checkout) hint.innerHTML = `<span data-lang="nl">Kies nu je vertrekdag.</span><span data-lang="en">Now choose your departure day.</span><span data-lang="pt">Agora escolha o dia de partida.</span>`;
+      else { const n = nightsBetween(sel.checkin, sel.checkout); hint.innerHTML = `<span data-lang="nl">${n} ${n===1?'nacht':'nachten'} geselecteerd.</span><span data-lang="en">${n} ${n===1?'night':'nights'} selected.</span><span data-lang="pt">${n} ${n===1?'noite':'noites'} selecionadas.</span>`; }
+    }
+
+    // price card
+    const card = document.getElementById('priceCard');
+    if (sel.checkin && sel.checkout) {
+      const nights = nightsBetween(sel.checkin, sel.checkout);
+      const nightsTotal = PRICING.nightlyRate * nights;
+      const subtotal = nightsTotal + PRICING.cleaningFee;
+      const service = Math.round(subtotal * PRICING.serviceFeeRate);
+      const total = subtotal + service;
+      document.getElementById('priceNightsLabel').textContent = `${fmtEuro(PRICING.nightlyRate)} × ${nights} ${nights===1?(lang==='en'?'night':lang==='pt'?'noite':'nacht'):(lang==='en'?'nights':lang==='pt'?'noites':'nachten')}`;
+      document.getElementById('priceNightsTotal').textContent = fmtEuro(nightsTotal);
+      document.getElementById('priceCleaning').textContent = fmtEuro(PRICING.cleaningFee);
+      document.getElementById('priceService').textContent = fmtEuro(service);
+      document.getElementById('priceTotal').textContent = fmtEuro(total);
+      card.classList.add('show');
+    } else if (card) {
+      card.classList.remove('show');
+    }
+
+    // book button always reflects current selection/guests
+    const btn = document.getElementById('wizardBookBtn');
+    if (btn) btn.href = buildAirbnbUrl();
+  }
 
   // ── LIGHTBOX ──
   const galleryPhotos = [
