@@ -947,6 +947,10 @@
       gap: 2rem;
     }
 
+    @media (min-width: 1100px) {
+      .reviews-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+
     .review-item {
       padding: 2.2rem;
       background: var(--warm-white);
@@ -1521,6 +1525,16 @@
     .review-stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.1em; margin-bottom: 0.8rem; }
     .review-attribution { display: flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem; }
     .review-attribution svg { width: 18px; height: 18px; }
+    .airbnb-cta-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.8rem 1.6rem;
+      background: var(--navy); color: var(--cream);
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .airbnb-cta-btn:hover { background: var(--gold); color: white; }
+    .airbnb-cta-btn svg { flex-shrink: 0; }
 
     /* ── CONTACT ACTION CARDS ── */
     .contact-cards { display: flex; flex-direction: column; gap: 1rem; }
@@ -2144,18 +2158,18 @@
     <h2 class="section-title reveal" data-lang="en">Reviews</h2>
     <h2 class="section-title reveal" data-lang="pt">Avaliações</h2>
     <div class="reviews-score">
-      <span class="score-big">5,0</span>
+      <span class="score-big">4,9</span>
       <div>
         <div class="score-stars">★ ★ ★ ★ ★</div>
-        <div class="score-label" data-lang="nl">Gemiddeld op basis van 9 Airbnb-recensies</div>
-        <div class="score-label" data-lang="en">Average based on 9 Airbnb reviews</div>
-        <div class="score-label" data-lang="pt">Média com base em 9 avaliações do Airbnb</div>
+        <div class="score-label" data-lang="nl">Gemiddeld op Airbnb</div>
+        <div class="score-label" data-lang="en">Average on Airbnb</div>
+        <div class="score-label" data-lang="pt">Média no Airbnb</div>
       </div>
       <div class="score-bars">
-        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Netheid</span><span class="score-bar-label" data-lang="en">Cleanliness</span><span class="score-bar-label" data-lang="pt">Limpeza</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
+        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Netheid</span><span class="score-bar-label" data-lang="en">Cleanliness</span><span class="score-bar-label" data-lang="pt">Limpeza</span><div class="score-bar-track"><div class="score-bar-fill" style="width:96%"></div></div><span class="score-bar-num">4,8</span></div>
         <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Communicatie</span><span class="score-bar-label" data-lang="en">Communication</span><span class="score-bar-label" data-lang="pt">Comunicação</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
         <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Locatie</span><span class="score-bar-label" data-lang="en">Location</span><span class="score-bar-label" data-lang="pt">Localização</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
-        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Waarde</span><span class="score-bar-label" data-lang="en">Value</span><span class="score-bar-label" data-lang="pt">Valor</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
+        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Waarde</span><span class="score-bar-label" data-lang="en">Value</span><span class="score-bar-label" data-lang="pt">Valor</span><div class="score-bar-track"><div class="score-bar-fill" style="width:98%"></div></div><span class="score-bar-num">4,9</span></div>
         <div class="score-bar-row"><span class="score-bar-label">Check-in</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
       </div>
     </div>
@@ -2163,33 +2177,51 @@
       <div class="review-item reveal">
         <div class="review-stars">★ ★ ★ ★ ★</div>
         <span class="review-quote">"</span>
-        <p class="review-text" data-lang="nl">"Prachtige locatie op het eiland. Het huis is knus en goed uitgerust. De communicatie met de host was uitstekend."</p>
-        <p class="review-text" data-lang="en">"Beautiful location on the island. The house is cosy and well-equipped. Communication with the host was excellent."</p>
-        <p class="review-text" data-lang="pt">"Localização fantástica na ilha. A casa é acolhedora e bem equipada. A comunicação com o anfitrião foi excelente."</p>
-        <span class="review-author">Sandra · Airbnb · 2024</span>
+        <p class="review-text" data-lang="nl">"Mooie omgeving — het eiland zelf is al een belevenis. Rustig, autovrij en op loopafstand van een prachtig strand. De woning is goed uitgerust en de host is vlot bereikbaar."</p>
+        <p class="review-text" data-lang="en">"Beautiful surroundings — the island itself is an experience. Peaceful, car-free and within walking distance of a stunning beach. The house is well-equipped and the host is easy to reach."</p>
+        <p class="review-text" data-lang="pt">"Ambiente lindo — a ilha em si já é uma experiência. Sossegada, sem carros e a poucos passos de uma praia deslumbrante. A casa é bem equipada e o anfitrião é fácil de contactar."</p>
+        <span class="review-author">Airbnb-gast · mei 2025</span>
       </div>
       <div class="review-item reveal">
         <div class="review-stars">★ ★ ★ ★ ★</div>
         <span class="review-quote">"</span>
-        <p class="review-text" data-lang="nl">"Ideaal voor een gezinsvakantie. De kinderen vonden het strand geweldig, en wij genoten van de rust en het terras."</p>
-        <p class="review-text" data-lang="en">"Ideal for a family holiday. The kids loved the beach, and we enjoyed the peace and quiet and the terrace."</p>
-        <p class="review-text" data-lang="pt">"Ideal para umas férias em família. Os miúdos adoraram a praia e nós desfrutámos da tranquilidade e do terraço."</p>
-        <span class="review-author">Mark · Airbnb · 2024</span>
+        <p class="review-text" data-lang="nl">"Uitzonderlijke communicatie met de host — alles tot in de puntjes geregeld. Check-in via het toetsenpaneel werkt perfect. Heerlijk terras en een prachtige schilderachtige locatie."</p>
+        <p class="review-text" data-lang="en">"Exceptional communication with the host — everything arranged perfectly. Check-in via the keypad works perfectly. Lovely terrace and a beautifully scenic location."</p>
+        <p class="review-text" data-lang="pt">"Comunicação excecional com o anfitrião — tudo organizado na perfeição. O check-in via painel funciona na perfeição. Terraço adorável e uma localização pitoresca e deslumbrante."</p>
+        <span class="review-author">Airbnb-gast · april 2025</span>
       </div>
       <div class="review-item reveal">
         <div class="review-stars">★ ★ ★ ★ ★</div>
         <span class="review-quote">"</span>
-        <p class="review-text" data-lang="nl">"Het autovrije eiland geeft een gevoel van totale ontspanning. De houten loopbrug naar het strand is prachtig."</p>
-        <p class="review-text" data-lang="en">"The car-free island gives a feeling of complete relaxation. The wooden boardwalk to the beach is beautiful."</p>
-        <p class="review-text" data-lang="pt">"A ilha sem carros proporciona uma sensação de descanso total. A passadeira de madeira para a praia é linda."</p>
-        <span class="review-author">Familie De Vries · Airbnb · 2025</span>
+        <p class="review-text" data-lang="nl">"De woning ligt op een schilderachtige locatie midden in de natuur. Ideaal voor een gezinsvakantie — de kinderen vonden het strand geweldig en wij genoten van de rust."</p>
+        <p class="review-text" data-lang="en">"The house has a picturesque location in the heart of nature. Ideal for a family holiday — the kids loved the beach and we enjoyed the peace and quiet."</p>
+        <p class="review-text" data-lang="pt">"A casa fica numa localização pitoresca no meio da natureza. Ideal para férias em família — os miúdos adoraram a praia e nós desfrutámos da tranquilidade."</p>
+        <span class="review-author">Airbnb-gast · augustus 2024</span>
+      </div>
+      <div class="review-item reveal">
+        <div class="review-stars">★ ★ ★ ★ ★</div>
+        <span class="review-quote">"</span>
+        <p class="review-text" data-lang="nl">"Zelf inchecken met het toetsenpaneel maakt aankomst heel gemakkelijk. Het eiland Armona is een verborgen parel — authentiek Portugal zonder toeristenmassa's."</p>
+        <p class="review-text" data-lang="en">"Self check-in via the keypad makes arrival very easy. The island of Armona is a hidden gem — authentic Portugal without the tourist crowds."</p>
+        <p class="review-text" data-lang="pt">"O check-in automático via painel torna a chegada muito fácil. A ilha de Armona é uma pérola escondida — Portugal autêntico sem multidões de turistas."</p>
+        <span class="review-author">Airbnb-gast · juli 2024</span>
+      </div>
+      <div class="review-item reveal">
+        <div class="review-stars">★ ★ ★ ★ ★</div>
+        <span class="review-quote">"</span>
+        <p class="review-text" data-lang="nl">"Geweldig verblijf! De natuur, de stilte, het strand op 100 meter — je vergeet meteen de stad. De woning heeft alles wat je nodig hebt. Zeker terugkomen."</p>
+        <p class="review-text" data-lang="en">"Great stay! The nature, the silence, the beach 100 metres away — you immediately forget the city. The house has everything you need. Definitely coming back."</p>
+        <p class="review-text" data-lang="pt">"Estadia fantástica! A natureza, o silêncio, a praia a 100 metros — esqueces imediatamente a cidade. A casa tem tudo o que precisas. De certeza que voltamos."</p>
+        <span class="review-author">Airbnb-gast · juni 2024</span>
       </div>
     </div>
     <div class="review-attribution reveal">
-      <svg class="airbnb-logo" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 11.5c-.23 1.03-2.1 2-4.5 2s-4.27-.97-4.5-2c-.14-.61.07-1.22.5-1.72l2-2.34c.23-.27.35-.59.31-.91l-.2-1.97c-.07-.62.38-1.06.89-1.06s.96.44.89 1.06l-.2 1.97c-.04.32.08.64.31.91l2 2.34c.43.5.64 1.11.5 1.72z"/></svg>
-      <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.78rem;color:var(--text-light);text-decoration:none;border-bottom:1px solid var(--border-gold);" data-lang="nl">9 beoordelingen op Airbnb</a>
-      <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.78rem;color:var(--text-light);text-decoration:none;border-bottom:1px solid var(--border-gold);" data-lang="en">9 reviews on Airbnb</a>
-      <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.78rem;color:var(--text-light);text-decoration:none;border-bottom:1px solid var(--border-gold);" data-lang="pt">9 avaliações no Airbnb</a>
+      <a href="https://www.airbnb.nl/rooms/27625624#reviews" target="_blank" rel="noopener" class="airbnb-cta-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12.006 2c-1.272 0-2.572.497-3.594 1.494-1.02.997-1.562 2.324-1.562 3.616.002.607.105 1.23.338 1.846l.008.021.009.02c.12.275.263.523.425.746L5.87 11.455A2.5 2.5 0 0 0 5 13.4c0 .74.327 1.449.893 1.94.57.49 1.32.726 2.05.726h.083l-.155.31c-.438.876-.617 1.73-.617 2.514 0 2.24 1.59 4.11 3.757 4.11s3.757-1.87 3.757-4.11c0-.784-.179-1.638-.617-2.515l-.155-.31h.083c.73 0 1.48-.235 2.05-.726.566-.491.893-1.2.893-1.94a2.5 2.5 0 0 0-.87-1.945l-1.76-1.712c.162-.223.305-.471.425-.747l.01-.02.007-.021a6.1 6.1 0 0 0 .338-1.846c0-1.292-.543-2.619-1.563-3.616C14.578 2.497 13.278 2 12.006 2zm0 1.5c.906 0 1.843.352 2.563 1.053.72.7 1.093 1.637 1.093 2.557a4.6 4.6 0 0 1-.257 1.4c-.082.188-.178.356-.284.503l-.14.191L12.006 12l-2.975-2.796-.14-.191a2.66 2.66 0 0 1-.284-.503 4.6 4.6 0 0 1-.257-1.4c0-.92.372-1.858 1.093-2.557.72-.7 1.657-1.053 2.563-1.053zM12 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-4.946 5.297 2.945 2.857-.887 1.773c-.353.707-.612 1.47-.612 2.963 0 1.435.976 2.61 2.5 2.61s2.5-1.175 2.5-2.61c0-1.493-.259-2.256-.612-2.963l-.887-1.773 2.945-2.857.742.721A1 1 0 0 1 16 14.4c0 .308-.134.6-.365.8-.229.198-.534.3-.835.3h-1.93l.883 1.766c.372.744.557 1.5.557 2.624 0 1.498-1.057 2.61-2.31 2.61-1.253 0-2.31-1.112-2.31-2.61 0-1.124.185-1.88.557-2.624l.884-1.766H9.2c-.301 0-.606-.102-.835-.3A1.003 1.003 0 0 1 8 14.4a1 1 0 0 1 .312-.728z"/></svg>
+        <span data-lang="nl">Bekijk alle beoordelingen op Airbnb</span>
+        <span data-lang="en">See all reviews on Airbnb</span>
+        <span data-lang="pt">Ver todas as avaliações no Airbnb</span>
+      </a>
     </div>
   </div>
 </section>
