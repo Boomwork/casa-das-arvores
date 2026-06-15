@@ -2636,7 +2636,6 @@
 
   async function loadIcal() {
     const statusEl = document.getElementById('cal-status');
-    // Try both .nl and .com — one may be blocked by a proxy while the other works
     const icalUrls = [
       'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
       'https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
@@ -2648,31 +2647,37 @@
       u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
       u => 'https://thingproxy.freeboard.io/fetch/' + u,
     ];
-    // Build attempts: each proxy with each URL
-    const attempts = [];
-    for (const u of icalUrls) for (const fn of proxyFns) attempts.push(fn(u));
 
-    let loaded = false;
-    bookedDates = new Set();
-    for (const proxyUrl of attempts) {
+    // Race all proxy+URL combinations simultaneously; first valid iCal wins
+    const tryFetch = async (proxyUrl) => {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 7000);
       try {
-        const res = await fetch(proxyUrl, { cache: 'no-cache' });
-        if (!res.ok) continue;
+        const res = await fetch(proxyUrl, { cache: 'no-cache', signal: ctrl.signal });
+        if (!res.ok) throw new Error('not ok');
         const raw = await res.text();
         let icalText = raw;
-        // allorigins /get wraps content in JSON {contents:"..."}
         if (raw.trimStart().startsWith('{')) {
           try { const j = JSON.parse(raw); if (j.contents) icalText = j.contents; } catch {}
         }
-        if (icalText && icalText.includes('BEGIN:VCALENDAR')) {
-          parseIcal(icalText);
-          if (statusEl) statusEl.textContent = '';
-          loaded = true;
-          break;
-        }
-      } catch(e) { /* try next */ }
-    }
-    if (!loaded) {
+        if (!icalText || !icalText.includes('BEGIN:VCALENDAR')) throw new Error('not ical');
+        return icalText;
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+
+    const racers = [];
+    for (const u of icalUrls) for (const fn of proxyFns) racers.push(tryFetch(fn(u)));
+
+    let loaded = false;
+    bookedDates = new Set();
+    try {
+      const icalText = await Promise.any(racers);
+      parseIcal(icalText);
+      if (statusEl) statusEl.textContent = '';
+      loaded = true;
+    } catch {
       const lang = currentLang();
       if (statusEl) {
         statusEl.className = 'cal-error';
@@ -2680,7 +2685,6 @@
           + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
       }
     }
-    // clear a saved selection that now conflicts with booked dates
     if (sel.checkin && (bookedDates.has(sel.checkin) || sel.checkin < new Date().toISOString().slice(0,10))) { sel.checkin = null; sel.checkout = null; saveSel(); }
     if (sel.checkin && sel.checkout && crossesBooked(sel.checkin, sel.checkout)) { sel.checkout = null; saveSel(); }
     renderCalendar();
