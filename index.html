@@ -1278,13 +1278,38 @@
     .amenity-card:hover { box-shadow: inset 0 0 0 1px rgba(184,150,90,0.4); }
 
     /* ── GALLERY EDITORIAL ── */
-    .gallery-editorial {
+    .gallery-featured {
       display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr;
-      grid-template-rows: 280px 240px;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 270px 270px 200px;
       gap: 6px;
       margin-top: 4rem;
     }
+    .gallery-featured .gallery-item:first-child {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+    #galleryMore {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: height 0.85s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease 0.1s;
+    }
+    #galleryMore.open { opacity: 1; }
+    .gallery-toggle-wrap { text-align: center; margin-top: 2.5rem; }
+    .gallery-toggle-btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--navy); background: none; border: 1px solid var(--navy);
+      padding: 1rem 2.4rem; cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+      font-family: inherit;
+    }
+    .gallery-toggle-btn:hover { background: var(--navy); color: var(--cream); }
     .gallery-item-overlay {
       position: absolute; inset: 0;
       background: rgba(27,45,79,0);
@@ -1617,7 +1642,9 @@
       .island-grid { grid-template-columns: 1fr; gap: 2rem; }
       .island-photo { height: 280px; }
       .amenities-grid { grid-template-columns: 1fr; }
-      .gallery-editorial { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .gallery-featured { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .gallery-featured .gallery-item:first-child { grid-column: 1 / 3; grid-row: auto; height: 220px; }
+      #galleryMore { grid-template-columns: 1fr 1fr; }
       .bedrooms-grid { grid-template-columns: 1fr; }
       .cal-dual { grid-template-columns: 1fr; }
       .calendar-layout { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -1955,7 +1982,7 @@
     <h2 class="section-title reveal" data-lang="nl">Sfeer en ruimte</h2>
     <h2 class="section-title reveal" data-lang="en">Atmosphere &amp; space</h2>
     <h2 class="section-title reveal" data-lang="pt">Ambiente e espaço</h2>
-    <div class="gallery-editorial">
+    <div class="gallery-featured">
       <div class="gallery-item" onclick="openLightbox(0)" style="cursor:pointer;position:relative;">
         <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/5d45b621-4b53-493c-9032-d01d76e19a66.jpeg" alt="Buitenkant – Casa das Árvores Ilha Armona" loading="lazy" />
         <div class="gallery-item-overlay"><div class="gallery-zoom"><i data-lucide="zoom-in" style="width:28px;height:28px;"></i></div></div>
@@ -1980,6 +2007,8 @@
         <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/031931e9-6be8-473f-b9e3-513dd8759757.jpeg" alt="Slaapkamer 3 – Casa das Árvores Ilha Armona" loading="lazy" />
         <div class="gallery-item-overlay"><div class="gallery-zoom"><i data-lucide="zoom-in" style="width:28px;height:28px;"></i></div></div>
       </div>
+    </div>
+    <div id="galleryMore">
       <div class="gallery-item" onclick="openLightbox(6)" style="cursor:pointer;position:relative;">
         <img src="https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/7142ca27-9389-4ee4-8870-e3baa5dedba2.jpeg" alt="Terras – Casa das Árvores Ilha Armona" loading="lazy" />
         <div class="gallery-item-overlay"><div class="gallery-zoom"><i data-lucide="zoom-in" style="width:28px;height:28px;"></i></div></div>
@@ -2069,10 +2098,13 @@
         <div class="gallery-item-overlay"><div class="gallery-zoom"><i data-lucide="zoom-in" style="width:28px;height:28px;"></i></div></div>
       </div>
     </div>
-    <div style="text-align:center;margin-top:2rem;">
-      <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--border-gold);padding-bottom:2px;" data-lang="nl">Bekijk alle foto's op Airbnb →</a>
-      <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--border-gold);padding-bottom:2px;" data-lang="en">View all photos on Airbnb →</a>
-      <a href="https://www.airbnb.nl/rooms/27625624" target="_blank" style="font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--border-gold);padding-bottom:2px;" data-lang="pt">Ver todas as fotos no Airbnb →</a>
+    <div class="gallery-toggle-wrap">
+      <button id="galleryToggleBtn" onclick="toggleGallery()" class="gallery-toggle-btn">
+        <span data-lang="nl">Bekijk alle 28 foto's</span>
+        <span data-lang="en">View all 28 photos</span>
+        <span data-lang="pt">Ver todas as 28 fotos</span>
+        <i data-lucide="chevron-down" id="galleryToggleIcon" style="width:18px;height:18px;transition:transform 0.3s ease;"></i>
+      </button>
     </div>
   </div>
 </section>
@@ -2158,7 +2190,7 @@
     <h2 class="section-title reveal" data-lang="en">Reviews</h2>
     <h2 class="section-title reveal" data-lang="pt">Avaliações</h2>
     <div class="reviews-score">
-      <span class="score-big">4,9</span>
+      <span class="score-big">5,0</span>
       <div>
         <div class="score-stars">★ ★ ★ ★ ★</div>
         <div class="score-label" data-lang="nl">Gemiddeld op Airbnb</div>
@@ -2166,10 +2198,10 @@
         <div class="score-label" data-lang="pt">Média no Airbnb</div>
       </div>
       <div class="score-bars">
-        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Netheid</span><span class="score-bar-label" data-lang="en">Cleanliness</span><span class="score-bar-label" data-lang="pt">Limpeza</span><div class="score-bar-track"><div class="score-bar-fill" style="width:96%"></div></div><span class="score-bar-num">4,8</span></div>
+        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Netheid</span><span class="score-bar-label" data-lang="en">Cleanliness</span><span class="score-bar-label" data-lang="pt">Limpeza</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
         <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Communicatie</span><span class="score-bar-label" data-lang="en">Communication</span><span class="score-bar-label" data-lang="pt">Comunicação</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
         <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Locatie</span><span class="score-bar-label" data-lang="en">Location</span><span class="score-bar-label" data-lang="pt">Localização</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
-        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Waarde</span><span class="score-bar-label" data-lang="en">Value</span><span class="score-bar-label" data-lang="pt">Valor</span><div class="score-bar-track"><div class="score-bar-fill" style="width:98%"></div></div><span class="score-bar-num">4,9</span></div>
+        <div class="score-bar-row"><span class="score-bar-label" data-lang="nl">Waarde</span><span class="score-bar-label" data-lang="en">Value</span><span class="score-bar-label" data-lang="pt">Valor</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
         <div class="score-bar-row"><span class="score-bar-label">Check-in</span><div class="score-bar-track"><div class="score-bar-fill" style="width:100%"></div></div><span class="score-bar-num">5,0</span></div>
       </div>
     </div>
@@ -3175,6 +3207,32 @@
     document.querySelectorAll('#lightboxThumbs img').forEach((t,i) => t.classList.toggle('active', i === currentPhoto));
   }
   function showPhoto(i) { currentPhoto = i; updateLightboxUI(); }
+  function toggleGallery() {
+    const el = document.getElementById('galleryMore');
+    const btn = document.getElementById('galleryToggleBtn');
+    const icon = document.getElementById('galleryToggleIcon');
+    const isOpen = el.classList.contains('open');
+    if (isOpen) {
+      el.style.height = el.scrollHeight + 'px';
+      requestAnimationFrame(() => requestAnimationFrame(() => { el.style.height = '0'; }));
+      el.classList.remove('open');
+      icon.style.transform = 'rotate(0deg)';
+      btn.querySelectorAll('[data-lang="nl"]').forEach(s => s.textContent = "Bekijk alle 28 foto's");
+      btn.querySelectorAll('[data-lang="en"]').forEach(s => s.textContent = 'View all 28 photos');
+      btn.querySelectorAll('[data-lang="pt"]').forEach(s => s.textContent = 'Ver todas as 28 fotos');
+      setTimeout(() => { const g = document.getElementById('galerij'); if(g) g.scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
+    } else {
+      el.classList.add('open');
+      el.style.height = el.scrollHeight + 'px';
+      el.addEventListener('transitionend', function h() { if(el.classList.contains('open')) el.style.height = 'auto'; el.removeEventListener('transitionend', h); });
+      icon.style.transform = 'rotate(180deg)';
+      btn.querySelectorAll('[data-lang="nl"]').forEach(s => s.textContent = 'Minder foto\'s tonen');
+      btn.querySelectorAll('[data-lang="en"]').forEach(s => s.textContent = 'Show fewer photos');
+      btn.querySelectorAll('[data-lang="pt"]').forEach(s => s.textContent = 'Mostrar menos fotos');
+    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+
   function openLightbox(i) {
     currentPhoto = i;
     const lb = document.getElementById('lightbox');
