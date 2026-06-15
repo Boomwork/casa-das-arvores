@@ -43,9 +43,20 @@ jobs:
             echo "::error::Could not fetch a valid iCal from Airbnb after 5 attempts"
             exit 1
           fi
-          # Verwijder de volatiele DTSTAMP-regels zodat we alleen committen bij
-          # echte boekingswijzigingen (anders elke run een nutteloze commit).
-          grep -v '^DTSTAMP' raw.ics > calendar.ics
+          # Privacy: bewaar alleen de bezette datumranges. DESCRIPTION (reserverings-URL +
+          # laatste 4 cijfers telefoon), UID en SUMMARY bevatten gastgegevens en worden
+          # weggelaten — het bestand is openbaar. De frontend gebruikt enkel DTSTART/DTEND.
+          awk '
+            /^BEGIN:VCALENDAR/ {print; next}
+            /^END:VCALENDAR/   {print; next}
+            /^VERSION:/        {print; next}
+            /^PRODID:/         {print; next}
+            /^CALSCALE:/       {print; next}
+            /^BEGIN:VEVENT/    {print; next}
+            /^END:VEVENT/      {print; next}
+            /^DTSTART/         {print; next}
+            /^DTEND/           {print; next}
+          ' raw.ics > calendar.ics
           rm -f raw.ics
 
       - name: Commit if changed
