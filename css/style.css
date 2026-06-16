@@ -651,6 +651,52 @@ nav {
   background: var(--warm-white);
   overflow: hidden;
   border-bottom: 2px solid var(--navy);
+  position: relative;
+  will-change: transform;
+  transform-style: preserve-3d;
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+/* Gold shimmer top-border sweep on hover */
+.bedroom-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Cursor-following radial shimmer */
+.bedroom-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(184,150,90,0.10) 0%, transparent 62%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.bedroom-card:hover {
+  box-shadow:
+    0 20px 60px rgba(27, 45, 79, 0.18),
+    0 6px 20px rgba(27, 45, 79, 0.10),
+    0 0 0 1px rgba(184, 150, 90, 0.18);
+  border-color: var(--gold);
+}
+
+.bedroom-card:hover::before {
+  transform: scaleX(1);
+}
+
+.bedroom-card:hover::after {
+  opacity: 1;
 }
 
 .bedroom-card img {
@@ -658,10 +704,13 @@ nav {
   height: 280px;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
 }
 
-.bedroom-card:hover img { transform: scale(1.04); }
+.bedroom-card:hover img {
+  transform: scale(1.05);
+  filter: brightness(1.05) saturate(1.08);
+}
 
 .bedroom-card-img {
   overflow: hidden;
@@ -669,6 +718,11 @@ nav {
 
 .bedroom-info {
   padding: 1.8rem 1.6rem;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bedroom-card:hover .bedroom-info {
+  transform: translateY(-4px);
 }
 
 .bedroom-info h3 {
@@ -1611,6 +1665,15 @@ footer::before {
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
   .scroll-chevron { animation: none; }
+  .bedroom-card,
+  .bedroom-card::before,
+  .bedroom-card::after,
+  .bedroom-card img,
+  .bedroom-info {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
 /* ── MOBILE ── */
