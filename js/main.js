@@ -43,17 +43,14 @@ let ticking = false;
 
 function onScroll() {
   const y = window.scrollY;
-  // scroll progress
   if (progressBar) {
     const h = document.documentElement.scrollHeight - window.innerHeight;
     progressBar.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
   }
-  // scroll indicator + back to top
   if (scrollInd) scrollInd.classList.toggle('hidden', y > 10);
   if (btt) btt.classList.toggle('visible', y > 400);
   if (!prefersReducedMotion) {
     if (heroBg) heroBg.style.transform = `scale(1.05) translateY(${y * 0.15}px)`;
-    // image parallax (only when near viewport)
     parallaxImgs.forEach(img => {
       const r = img.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight) {
@@ -141,7 +138,6 @@ sections.forEach(s => sectionObs.observe(s));
 let calYear, calMonth;
 let bookedDates = new Set();
 
-// ── BOOKING WIZARD CONFIG ──
 const PRICING = {
   nightlyRate: 130,
   cleaningFee: 75,
@@ -178,67 +174,103 @@ function initCalendar() {
   loadIcal();
 }
 
+const ICAL_CACHE_KEY = 'cda_ical_v1';
+const ICAL_CACHE_TTL = 3600000;
+
+function getCachedIcal() {
+  try {
+    const c = sessionStorage.getItem(ICAL_CACHE_KEY);
+    if (!c) return null;
+    const { ts, data } = JSON.parse(c);
+    return (Date.now() - ts < ICAL_CACHE_TTL) ? data : null;
+  } catch { return null; }
+}
+
+function saveCachedIcal(text) {
+  try { sessionStorage.setItem(ICAL_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: text })); } catch {}
+}
+
+async function fetchFreshIcal() {
+  try {
+    const r = await fetch('calendar.ics?cb=' + Math.floor(Date.now() / 3600000), { cache: 'no-cache' });
+    if (r.ok) { const t = await r.text(); if (t && t.includes('BEGIN:VCALENDAR')) return t; }
+  } catch {}
+
+  const icalUrls = [
+    'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
+    'https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
+  ];
+  const proxyFns = [
+    u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+    u => 'https://api.allorigins.win/get?url='  + encodeURIComponent(u),
+    u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+    u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+    u => 'https://thingproxy.freeboard.io/fetch/' + u,
+  ];
+  const tryProxy = async url => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 10000);
+    try {
+      const r = await fetch(url, { cache: 'no-cache', signal: ctrl.signal });
+      if (!r.ok) throw 0;
+      const raw = await r.text();
+      let ical = raw;
+      if (raw.trimStart().startsWith('{')) {
+        try { const j = JSON.parse(raw); if (j.contents) ical = j.contents; } catch {}
+      }
+      if (!ical || !ical.includes('BEGIN:VCALENDAR')) throw 0;
+      return ical;
+    } finally { clearTimeout(timer); }
+  };
+
+  const racers = [];
+  for (const u of icalUrls) for (const fn of proxyFns) racers.push(tryProxy(fn(u)));
+  try { return await Promise.any(racers); } catch {}
+
+  for (const u of icalUrls) {
+    for (const fn of proxyFns) {
+      try { const t = await tryProxy(fn(u)); if (t) return t; } catch {}
+    }
+  }
+  return null;
+}
+
 async function loadIcal() {
   const statusEl = document.getElementById('cal-status');
-  let loaded = false;
   bookedDates = new Set();
 
-  try {
-    const res = await fetch('calendar.ics?cb=' + Math.floor(Date.now() / 3600000), { cache: 'no-cache' });
-    if (res.ok) {
-      const txt = await res.text();
-      if (txt && txt.includes('BEGIN:VCALENDAR')) { parseIcal(txt); loaded = true; }
-    }
-  } catch (e) { }
-
-  if (!loaded) {
-    const icalUrls = [
-      'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
-      'https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
-    ];
-    const proxyFns = [
-      u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-      u => 'https://api.allorigins.win/get?url='  + encodeURIComponent(u),
-      u => 'https://corsproxy.io/?' + encodeURIComponent(u),
-      u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
-      u => 'https://thingproxy.freeboard.io/fetch/' + u,
-    ];
-    const tryFetch = async (proxyUrl) => {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 7000);
-      try {
-        const res = await fetch(proxyUrl, { cache: 'no-cache', signal: ctrl.signal });
-        if (!res.ok) throw new Error('not ok');
-        const raw = await res.text();
-        let icalText = raw;
-        if (raw.trimStart().startsWith('{')) {
-          try { const j = JSON.parse(raw); if (j.contents) icalText = j.contents; } catch {}
-        }
-        if (!icalText || !icalText.includes('BEGIN:VCALENDAR')) throw new Error('not ical');
-        return icalText;
-      } finally { clearTimeout(timer); }
-    };
-    const racers = [];
-    for (const u of icalUrls) for (const fn of proxyFns) racers.push(tryFetch(fn(u)));
-    try { const t = await Promise.any(racers); parseIcal(t); loaded = true; } catch (e) { }
+  const cached = getCachedIcal();
+  if (cached) {
+    parseIcal(cached);
+    renderCalendar();
+    updateWizard();
+    computeNextAvailable();
   }
 
-  if (loaded) {
+  const fresh = await fetchFreshIcal();
+  if (fresh) {
+    saveCachedIcal(fresh);
+    bookedDates = new Set();
+    parseIcal(fresh);
     if (statusEl) statusEl.textContent = '';
-  } else {
+  } else if (!cached) {
     const lang = currentLang();
     if (statusEl) {
       statusEl.className = 'cal-error';
       statusEl.innerHTML = (lang==='nl' ? '⚠ Agenda kon niet worden geladen. ' : lang==='en' ? '⚠ Calendar could not be loaded. ' : '⚠ Calendário não carregou. ')
         + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
     }
+  } else {
+    if (statusEl) statusEl.textContent = '';
   }
+
   if (sel.checkin && (bookedDates.has(sel.checkin) || sel.checkin < new Date().toISOString().slice(0,10))) { sel.checkin = null; sel.checkout = null; saveSel(); }
   if (sel.checkin && sel.checkout && crossesBooked(sel.checkin, sel.checkout)) { sel.checkout = null; saveSel(); }
   renderCalendar();
   updateWizard();
-  if (loaded) computeNextAvailable();
+  if (fresh || cached) computeNextAvailable();
 }
+
 function parseIcal(text) {
   if (!text) return;
   const unfolded = text.replace(/\r?\n[ \t]/g, '');
@@ -351,7 +383,6 @@ function computeNextAvailable() {
 function prevMonth() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(true); }
 function nextMonth() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(true); }
 
-// ── BOOKING WIZARD LOGIC ──
 function changeGuests(type, delta) {
   const total = sel.adults + sel.children;
   if (delta > 0 && total >= PRICING.maxGuests) { flashGuestMax(); return; }
@@ -539,7 +570,7 @@ const galleryPhotos = [
   {src:'https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/f8ed8bc9-77b7-480f-9a80-f84c7d3929fb.jpeg', nl:'Buitenterras', en:'Outdoor terrace', pt:'Terraço exterior'},
   {src:'https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/fef398a8-de20-4ed7-a882-36c995cc1726.jpeg', nl:'Eilandpad en Ria Formosa natuur', en:'Island path and Ria Formosa nature', pt:'Caminho da ilha e Ria Formosa'},
   {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/895ec575-6973-42ad-9446-1629f836da3e.jpeg', nl:'Slaapkamer met kast', en:'Bedroom with wardrobe', pt:'Quarto com roupeiro'},
-  {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/9dc8be7c-61a6-4604-beb2-7e4346ea28d1.jpeg', nl:'Tuin met bomen', en:'Garden with trees', pt:'Jardim com árvores'},
+  {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/9dc8be7c-61a6-4604-beb2-7e4346ea28d1.jpeg', nl:'Tuin met bomen', en:'Garden with trees', pt:'Jardim met bomen'},
 ];
 let currentPhoto = 0;
 (function buildThumbs(){
@@ -635,7 +666,6 @@ lbEl.addEventListener('touchend', e => {
 
 // ── CONTACT FORM ──
 const FORMSPREE_ID = 'mwvjyqrl';
-
 let _captchaA = 0, _captchaB = 0, _captchaAnswer = 0;
 
 function genCaptcha() {
@@ -678,23 +708,18 @@ genCaptcha();
 (function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
-
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
     const lang = currentLang();
     const feedback = document.getElementById('formFeedback');
     const submitBtn = form.querySelector('.submit-btn');
-
     const captchaVal = parseInt(document.getElementById('captchaInput').value, 10);
     if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
-      feedback.textContent = lang==='nl' ? 'Verkeerd antwoord. Probeer het opnieuw.'
-                           : lang==='en' ? 'Incorrect answer. Please try again.'
-                           : 'Resposta incorreta. Por favor tente novamente.';
+      feedback.textContent = lang==='nl' ? 'Verkeerd antwoord. Probeer het opnieuw.' : lang==='en' ? 'Incorrect answer. Please try again.' : 'Resposta incorreta. Por favor tente novamente.';
       feedback.className = 'form-feedback error';
       genCaptcha();
       return;
     }
-
     const aanhefSel = form.querySelector(`.aanhef-select[data-lang="${lang}"]`);
     const aanhef    = aanhefSel ? aanhefSel.value : '';
     const voornaam  = form.querySelector('[name="voornaam"]').value.trim();
@@ -705,33 +730,25 @@ genCaptcha();
     const vertrek   = form.querySelector('[name="vertrek"]').value;
     const personen  = form.querySelector('[name="personen"]').value;
     const bericht   = form.querySelector('[name="bericht"]').value.trim();
-
     if (!voornaam || !achternaam || !email || !bericht) {
-      feedback.textContent = lang==='nl' ? 'Vul alle verplichte velden (*) in.'
-                           : lang==='en' ? 'Please fill in all required fields (*).'
-                           : 'Por favor preencha todos os campos obrigatórios (*).'
+      feedback.textContent = lang==='nl' ? 'Vul alle verplichte velden (*) in.' : lang==='en' ? 'Please fill in all required fields (*).' : 'Por favor preencha todos os campos obrigatórios (*).'
       feedback.className = 'form-feedback error';
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      feedback.textContent = lang==='nl' ? 'Vul een geldig e-mailadres in.'
-                           : lang==='en' ? 'Please enter a valid email address.'
-                           : 'Por favor insira um e-mail válido.';
+      feedback.textContent = lang==='nl' ? 'Vul een geldig e-mailadres in.' : lang==='en' ? 'Please enter a valid email address.' : 'Por favor insira um e-mail válido.';
       feedback.className = 'form-feedback error';
       return;
     }
-
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.6';
     feedback.className = 'form-feedback';
-
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
-          aanhef, voornaam, achternaam, email, telefoon,
-          aankomst, vertrek, personen, bericht,
+          aanhef, voornaam, achternaam, email, telefoon, aankomst, vertrek, personen, bericht,
           _subject: `Aanvraag Casa das Árvores – ${voornaam} ${achternaam}`,
           _replyto: email,
           _autoresponse: ({
@@ -744,22 +761,12 @@ genCaptcha();
       const json = await res.json().catch(() => ({}));
       if (res.ok) {
         form.innerHTML = `<div class="form-feedback success" style="display:block;">`
-          + (lang==='nl' ? `Bedankt, ${voornaam}! Uw bericht is ontvangen. We nemen zo spoedig mogelijk contact met u op.`
-           : lang==='en' ? `Thank you, ${voornaam}! Your message has been received. We'll be in touch soon.`
-           : `Obrigado, ${voornaam}! A sua mensagem foi recebida. Entraremos em contacto em breve.`)
+          + (lang==='nl' ? `Bedankt, ${voornaam}! Uw bericht is ontvangen. We nemen zo spoedig mogelijk contact met u op.` : lang==='en' ? `Thank you, ${voornaam}! Your message has been received. We'll be in touch soon.` : `Obrigado, ${voornaam}! A sua mensagem foi recebida. Entraremos em contacto em breve.`)
           + `</div>`;
-        requestAnimationFrame(() => {
-          form.querySelector('.form-feedback').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-      } else {
-        throw new Error(json.error || 'server error');
-      }
+        requestAnimationFrame(() => { form.querySelector('.form-feedback').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+      } else { throw new Error(json.error || 'server error'); }
     } catch(err) {
-      feedback.textContent = lang==='nl'
-        ? 'Er is een fout opgetreden. Probeer het later opnieuw of stuur een e-mail naar bertverboom@gmail.com.'
-        : lang==='en'
-        ? 'Something went wrong. Please try again or email bertverboom@gmail.com.'
-        : 'Ocorreu um erro. Tente novamente ou envie um e-mail para bertverboom@gmail.com.';
+      feedback.textContent = lang==='nl' ? 'Er is een fout opgetreden. Probeer het later opnieuw of stuur een e-mail naar bertverboom@gmail.com.' : lang==='en' ? 'Something went wrong. Please try again or email bertverboom@gmail.com.' : 'Ocorreu um erro. Tente novamente ou envie um e-mail para bertverboom@gmail.com.';
       feedback.className = 'form-feedback error';
       submitBtn.disabled = false;
       submitBtn.style.opacity = '';
@@ -771,7 +778,6 @@ genCaptcha();
 (function initBedroomTilt() {
   if (window.matchMedia('(pointer: coarse)').matches) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
   document.querySelectorAll('.bedroom-card').forEach(card => {
     card.addEventListener('mousemove', function(e) {
       const rect = card.getBoundingClientRect();
@@ -785,11 +791,9 @@ genCaptcha();
       card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
       card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
     });
-
     card.addEventListener('mouseenter', () => {
       card.style.transition = 'transform 0.08s ease, box-shadow 0.4s ease, border-color 0.4s ease';
     });
-
     card.addEventListener('mouseleave', () => {
       card.style.transition = 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s ease, border-color 0.45s ease';
       card.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
@@ -800,12 +804,6 @@ genCaptcha();
 // ── INIT ──
 document.getElementById('footer-year').textContent = new Date().getFullYear();
 initCalendar();
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-});
-if (document.readyState !== 'loading') {
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-}
-window.addEventListener('load', () => {
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-});
+document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });
+if (document.readyState !== 'loading') { if (typeof lucide !== 'undefined') lucide.createIcons(); }
+window.addEventListener('load', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });
