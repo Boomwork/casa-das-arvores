@@ -773,6 +773,9 @@ genCaptcha();
            : lang==='en' ? `Thank you, ${voornaam}! Your message has been received. We'll be in touch soon.`
            : `Obrigado, ${voornaam}! A sua mensagem foi recebida. Entraremos em contacto em breve.`)
           + `</div>`;
+        requestAnimationFrame(() => {
+          form.querySelector('.form-feedback').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
       } else {
         throw new Error(json.error || 'server error');
       }
