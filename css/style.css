@@ -436,7 +436,7 @@ nav {
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.65);
 }
 
 /* ── SECTIONS ── */
@@ -607,7 +607,7 @@ nav {
 
 .amenity-text {
   font-size: 0.83rem;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.65);
   line-height: 1.8;
 }
 
@@ -790,7 +790,7 @@ nav {
   font-size: 0.62rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.55);
   padding: 0.4rem 0;
 }
 
@@ -816,7 +816,7 @@ nav {
 .cal-day.empty { pointer-events: none; }
 
 .cal-day.booked {
-  color: rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.4);
 }
 .cal-day.booked::after {
   content: '';
@@ -847,7 +847,7 @@ nav {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.72rem;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.6);
   letter-spacing: 0.08em;
 }
 
@@ -869,7 +869,7 @@ nav {
 
 .cal-info strong { color: rgba(255,255,255,0.9); font-weight: 400; }
 
-.cal-loading { font-size: 0.78rem; color: rgba(255,255,255,0.3); font-style: italic; }
+.cal-loading { font-size: 0.78rem; color: rgba(255,255,255,0.6); font-style: italic; }
 .cal-error { font-size: 0.78rem; color: rgba(184,150,90,0.8); }
 
 .book-btn {
@@ -1154,7 +1154,7 @@ footer {
   background: var(--navy-deep);
   background-image:
     repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 22px);
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.55);
   padding: 3rem 5rem;
   display: flex;
   justify-content: space-between;
@@ -1192,7 +1192,7 @@ footer::before {
 }
 
 .footer-links a {
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.55);
   text-decoration: none;
   font-size: 0.65rem;
   letter-spacing: 0.14em;
@@ -1397,7 +1397,7 @@ footer::before {
 /* ── CALENDAR DUAL ── */
 .cal-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 .cal-day.past { opacity: 0.3; pointer-events: none; }
-.cal-day.booked { background: rgba(180,40,40,0.25); color: rgba(255,255,255,0.3); text-decoration: line-through; }
+.cal-day.booked { background: rgba(180,40,40,0.25); color: rgba(255,255,255,0.45); text-decoration: line-through; }
 .cal-day.available:hover { background: rgba(40,140,80,0.15); cursor: default; box-shadow: 0 0 12px rgba(184,150,90,0.4); }
 .cal-grid.swap-in { animation: calSlide 0.4s ease; }
 @keyframes calSlide { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
@@ -1463,7 +1463,7 @@ footer::before {
 }
 .guest-row-label { display: flex; flex-direction: column; gap: 0.15rem; }
 .guest-row-label .g-title { font-size: 0.88rem; color: rgba(255,255,255,0.9); }
-.guest-row-label .g-sub { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+.guest-row-label .g-sub { font-size: 0.68rem; color: rgba(255,255,255,0.65); }
 .guest-stepper { display: flex; align-items: center; gap: 0.9rem; }
 .g-btn {
   width: 32px; height: 32px; border-radius: 50%;
@@ -1484,15 +1484,15 @@ footer::before {
 .date-cell {
   flex: 1; padding: 0.85rem 1rem; background: rgba(255,255,255,0.04);
 }
-.date-cell .d-label { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.3rem; }
+.date-cell .d-label { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 0.3rem; }
 .date-cell .d-value { font-size: 0.92rem; color: #fff; }
-.date-cell .d-value.placeholder { color: rgba(255,255,255,0.3); }
+.date-cell .d-value.placeholder { color: rgba(255,255,255,0.5); }
 .date-reset {
   background: none; border: none; color: var(--gold-light);
   font-size: 0.7rem; letter-spacing: 0.08em; cursor: pointer;
   text-decoration: underline; margin-top: 0.5rem; padding: 0; align-self: flex-start;
 }
-.date-hint { font-size: 0.72rem; color: rgba(255,255,255,0.45); line-height: 1.6; margin-top: 0.4rem; }
+.date-hint { font-size: 0.72rem; color: rgba(255,255,255,0.65); line-height: 1.6; margin-top: 0.4rem; }
 .date-hint.warn { color: #e0a96d; }
 
 /* price card */
@@ -1505,12 +1505,12 @@ footer::before {
 .price-card.show { max-height: 600px; opacity: 1; padding-top: 1.6rem; padding-bottom: 1.6rem; }
 .price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
 .price-row .p-calc { border-bottom: 1px dotted rgba(255,255,255,0.25); cursor: help; }
-.price-row.fee { font-size: 0.78rem; color: rgba(255,255,255,0.45); }
+.price-row.fee { font-size: 0.78rem; color: rgba(255,255,255,0.65); }
 .price-divider { height: 1px; background: rgba(255,255,255,0.12); margin: 1rem 0; }
 .price-total { display: flex; justify-content: space-between; align-items: baseline; }
 .price-total .pt-label { font-size: 0.78rem; letter-spacing: 0.06em; color: rgba(255,255,255,0.9); }
 .price-total .pt-value { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; color: var(--gold-light); }
-.price-disclaimer { font-size: 0.68rem; color: rgba(255,255,255,0.35); line-height: 1.6; margin-top: 1rem; font-style: italic; }
+.price-disclaimer { font-size: 0.68rem; color: rgba(255,255,255,0.6); line-height: 1.6; margin-top: 1rem; font-style: italic; }
 .wizard-book-btn {
   display: flex; align-items: center; justify-content: center; gap: 0.6rem;
   width: 100%; padding: 1rem; margin-top: 1.2rem;
