@@ -178,66 +178,103 @@ function initCalendar() {
   loadIcal();
 }
 
+const ICAL_CACHE_KEY = 'cda_ical_v1';
+const ICAL_CACHE_TTL = 3600000; // 1 hour
+
+function getCachedIcal() {
+  try {
+    const c = sessionStorage.getItem(ICAL_CACHE_KEY);
+    if (!c) return null;
+    const { ts, data } = JSON.parse(c);
+    return (Date.now() - ts < ICAL_CACHE_TTL) ? data : null;
+  } catch { return null; }
+}
+
+function saveCachedIcal(text) {
+  try { sessionStorage.setItem(ICAL_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: text })); } catch {}
+}
+
+async function fetchFreshIcal() {
+  try {
+    const r = await fetch('calendar.ics?cb=' + Math.floor(Date.now() / 3600000), { cache: 'no-cache' });
+    if (r.ok) { const t = await r.text(); if (t && t.includes('BEGIN:VCALENDAR')) return t; }
+  } catch {}
+
+  const icalUrls = [
+    'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
+    'https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
+  ];
+  const proxyFns = [
+    u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+    u => 'https://api.allorigins.win/get?url='  + encodeURIComponent(u),
+    u => 'https://corsproxy.io/?' + encodeURIComponent(u),
+    u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
+    u => 'https://thingproxy.freeboard.io/fetch/' + u,
+  ];
+  const tryProxy = async url => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 10000);
+    try {
+      const r = await fetch(url, { cache: 'no-cache', signal: ctrl.signal });
+      if (!r.ok) throw 0;
+      const raw = await r.text();
+      let ical = raw;
+      if (raw.trimStart().startsWith('{')) {
+        try { const j = JSON.parse(raw); if (j.contents) ical = j.contents; } catch {}
+      }
+      if (!ical || !ical.includes('BEGIN:VCALENDAR')) throw 0;
+      return ical;
+    } finally { clearTimeout(timer); }
+  };
+
+  const racers = [];
+  for (const u of icalUrls) for (const fn of proxyFns) racers.push(tryProxy(fn(u)));
+  try { return await Promise.any(racers); } catch {}
+
+  // Sequential fallback — catches proxies that respond just after the race timeout
+  for (const u of icalUrls) {
+    for (const fn of proxyFns) {
+      try { const t = await tryProxy(fn(u)); if (t) return t; } catch {}
+    }
+  }
+  return null;
+}
+
 async function loadIcal() {
   const statusEl = document.getElementById('cal-status');
-  let loaded = false;
   bookedDates = new Set();
 
-  try {
-    const res = await fetch('calendar.ics?cb=' + Math.floor(Date.now() / 3600000), { cache: 'no-cache' });
-    if (res.ok) {
-      const txt = await res.text();
-      if (txt && txt.includes('BEGIN:VCALENDAR')) { parseIcal(txt); loaded = true; }
-    }
-  } catch (e) { }
-
-  if (!loaded) {
-    const icalUrls = [
-      'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
-      'https://www.airbnb.com/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
-    ];
-    const proxyFns = [
-      u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-      u => 'https://api.allorigins.win/get?url='  + encodeURIComponent(u),
-      u => 'https://corsproxy.io/?' + encodeURIComponent(u),
-      u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
-      u => 'https://thingproxy.freeboard.io/fetch/' + u,
-    ];
-    const tryFetch = async (proxyUrl) => {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 7000);
-      try {
-        const res = await fetch(proxyUrl, { cache: 'no-cache', signal: ctrl.signal });
-        if (!res.ok) throw new Error('not ok');
-        const raw = await res.text();
-        let icalText = raw;
-        if (raw.trimStart().startsWith('{')) {
-          try { const j = JSON.parse(raw); if (j.contents) icalText = j.contents; } catch {}
-        }
-        if (!icalText || !icalText.includes('BEGIN:VCALENDAR')) throw new Error('not ical');
-        return icalText;
-      } finally { clearTimeout(timer); }
-    };
-    const racers = [];
-    for (const u of icalUrls) for (const fn of proxyFns) racers.push(tryFetch(fn(u)));
-    try { const t = await Promise.any(racers); parseIcal(t); loaded = true; } catch (e) { }
+  // Serve cached data immediately for instant rendering on revisit
+  const cached = getCachedIcal();
+  if (cached) {
+    parseIcal(cached);
+    renderCalendar();
+    updateWizard();
+    computeNextAvailable();
   }
 
-  if (loaded) {
+  const fresh = await fetchFreshIcal();
+  if (fresh) {
+    saveCachedIcal(fresh);
+    bookedDates = new Set();
+    parseIcal(fresh);
     if (statusEl) statusEl.textContent = '';
-  } else {
+  } else if (!cached) {
     const lang = currentLang();
     if (statusEl) {
       statusEl.className = 'cal-error';
       statusEl.innerHTML = (lang==='nl' ? '⚠ Agenda kon niet worden geladen. ' : lang==='en' ? '⚠ Calendar could not be loaded. ' : '⚠ Calendário não carregou. ')
         + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
     }
+  } else {
+    if (statusEl) statusEl.textContent = '';
   }
+
   if (sel.checkin && (bookedDates.has(sel.checkin) || sel.checkin < new Date().toISOString().slice(0,10))) { sel.checkin = null; sel.checkout = null; saveSel(); }
   if (sel.checkin && sel.checkout && crossesBooked(sel.checkin, sel.checkout)) { sel.checkout = null; saveSel(); }
   renderCalendar();
   updateWizard();
-  if (loaded) computeNextAvailable();
+  if (fresh || cached) computeNextAvailable();
 }
 function parseIcal(text) {
   if (!text) return;
@@ -539,7 +576,7 @@ const galleryPhotos = [
   {src:'https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/f8ed8bc9-77b7-480f-9a80-f84c7d3929fb.jpeg', nl:'Buitenterras', en:'Outdoor terrace', pt:'Terraço exterior'},
   {src:'https://a0.muscache.com/im/pictures/miso/Hosting-27625624/original/fef398a8-de20-4ed7-a882-36c995cc1726.jpeg', nl:'Eilandpad en Ria Formosa natuur', en:'Island path and Ria Formosa nature', pt:'Caminho da ilha e Ria Formosa'},
   {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/895ec575-6973-42ad-9446-1629f836da3e.jpeg', nl:'Slaapkamer met kast', en:'Bedroom with wardrobe', pt:'Quarto com roupeiro'},
-  {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/9dc8be7c-61a6-4604-beb2-7e4346ea28d1.jpeg', nl:'Tuin met bomen', en:'Garden with trees', pt:'Jardim com árvores'},
+  {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/9dc8be7c-61a6-4604-beb2-7e4346ea28d1.jpeg', nl:'Tuin met bomen', en:'Garden with trees', pt:'Jardim met bomen'},
 ];
 let currentPhoto = 0;
 (function buildThumbs(){
