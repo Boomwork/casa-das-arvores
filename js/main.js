@@ -779,9 +779,9 @@ genCaptcha();
       const y = e.clientY - rect.top;
       const cx = rect.width / 2;
       const cy = rect.height / 2;
-      const rY = ((x - cx) / cx) * 8;
-      const rX = -((y - cy) / cy) * 5;
-      card.style.transform = `perspective(1200px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.02,1.02,1.02)`;
+      const rY = ((x - cx) / cx) * 4;
+      const rX = -((y - cy) / cy) * 2.5;
+      card.style.transform = `perspective(1400px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.01,1.01,1.01)`;
       card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
       card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
     });
@@ -791,8 +791,8 @@ genCaptcha();
     });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-color 0.4s ease';
-      card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+      card.style.transition = 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s ease, border-color 0.45s ease';
+      card.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
     });
   });
 })();
