@@ -79,7 +79,7 @@ onScroll();
   [...text].forEach((ch, i) => {
     const s = document.createElement('span');
     s.className = 'char';
-    s.textContent = ch === ' ' ? ' ' : ch;
+    s.textContent = ch === ' ' ? ' ' : ch;
     s.style.animationDelay = (0.5 + i * 0.03) + 's';
     tag.appendChild(s);
   });
@@ -142,16 +142,14 @@ let calYear, calMonth;
 let bookedDates = new Set();
 
 // ── BOOKING WIZARD CONFIG ──
-// Pas deze tarieven aan; Airbnb toont de definitieve prijs na doorklikken.
 const PRICING = {
-  nightlyRate: 130,        // € per nacht (indicatief)
-  cleaningFee: 75,         // € eenmalig
-  serviceFeeRate: 0.14,    // ~14% Airbnb servicekosten (schatting)
-  minStay: 2,              // minimum aantal nachten
+  nightlyRate: 130,
+  cleaningFee: 75,
+  serviceFeeRate: 0.14,
+  minStay: 2,
   maxGuests: 6,
 };
 const ROOM_URL = 'https://www.airbnb.nl/rooms/27625624';
-// wizard state (persists across language switches via sessionStorage)
 let sel = { checkin: null, checkout: null, adults: 2, children: 0 };
 try {
   const saved = JSON.parse(sessionStorage.getItem('cda_booking') || 'null');
@@ -185,16 +183,14 @@ async function loadIcal() {
   let loaded = false;
   bookedDates = new Set();
 
-  // 1) Snelle, betrouwbare route: ons eigen calendar.ics (server-side ververst door GitHub Action)
   try {
     const res = await fetch('calendar.ics?cb=' + Math.floor(Date.now() / 3600000), { cache: 'no-cache' });
     if (res.ok) {
       const txt = await res.text();
       if (txt && txt.includes('BEGIN:VCALENDAR')) { parseIcal(txt); loaded = true; }
     }
-  } catch (e) { /* val terug op proxies */ }
+  } catch (e) { }
 
-  // 2) Fallback: publieke CORS-proxies parallel racen (eerste geldige iCal wint)
   if (!loaded) {
     const icalUrls = [
       'https://www.airbnb.nl/calendar/ical/27625624.ics?t=99e49cb78fc546b3974647ad8552c337',
@@ -224,7 +220,7 @@ async function loadIcal() {
     };
     const racers = [];
     for (const u of icalUrls) for (const fn of proxyFns) racers.push(tryFetch(fn(u)));
-    try { const t = await Promise.any(racers); parseIcal(t); loaded = true; } catch (e) { /* alles faalde */ }
+    try { const t = await Promise.any(racers); parseIcal(t); loaded = true; } catch (e) { }
   }
 
   if (loaded) {
@@ -233,7 +229,7 @@ async function loadIcal() {
     const lang = currentLang();
     if (statusEl) {
       statusEl.className = 'cal-error';
-      statusEl.innerHTML = (lang==='nl' ? '⚠ Agenda kon niet worden geladen. ' : lang==='en' ? '⚠ Calendar could not be loaded. ' : '⚠ Calend\u00e1rio n\u00e3o carregou. ')
+      statusEl.innerHTML = (lang==='nl' ? '⚠ Agenda kon niet worden geladen. ' : lang==='en' ? '⚠ Calendar could not be loaded. ' : '⚠ Calendário não carregou. ')
         + `<button class="cal-retry-btn" onclick="loadIcal()">${lang==='nl'?'Opnieuw proberen':lang==='en'?'Try again':'Tentar novamente'}</button>`;
     }
   }
@@ -245,17 +241,15 @@ async function loadIcal() {
 }
 function parseIcal(text) {
   if (!text) return;
-  // Unfold iCal lines (CRLF + whitespace = continuation)
   const unfolded = text.replace(/\r?\n[ \t]/g, '');
   const lines = unfolded.split(/\r?\n/);
   let inEvent = false, dtStart = null, dtEnd = null;
   for (const line of lines) {
     if (line.startsWith('BEGIN:VEVENT')) { inEvent = true; dtStart = null; dtEnd = null; }
     if (!inEvent) continue;
-    // Value is everything after the last colon (handles DTSTART;VALUE=DATE:20260614)
     const colonIdx = line.indexOf(':');
     if (colonIdx < 0) continue;
-    const key = line.slice(0, colonIdx).split(';')[0]; // strip params like ;VALUE=DATE
+    const key = line.slice(0, colonIdx).split(';')[0];
     const val = line.slice(colonIdx + 1).trim();
     if (key === 'DTSTART' && val) dtStart = parseIcalDate(val);
     if (key === 'DTEND'   && val) dtEnd   = parseIcalDate(val);
@@ -294,11 +288,9 @@ function renderOneMonth(gridId, labelId, year, month) {
     else if (isBooked) classes.push('booked');
     else classes.push('available');
     if (dateStr === todayStr) classes.push('today');
-    // range selection highlighting
     if (sel.checkin && dateStr === sel.checkin) classes.push('range-start');
     if (sel.checkout && dateStr === sel.checkout) classes.push('range-end');
     if (sel.checkin && sel.checkout && dateStr > sel.checkin && dateStr < sel.checkout) classes.push('in-range');
-    // when picking checkout, disable days that would cross a booked night or are before checkin
     if (sel.checkin && !sel.checkout && !isPast && !isBooked) {
       if (dateStr <= sel.checkin || crossesBooked(sel.checkin, dateStr)) classes.push('range-disabled');
     }
@@ -309,7 +301,6 @@ function renderOneMonth(gridId, labelId, year, month) {
   grid.innerHTML = html;
 }
 
-// does the range [a,b) cover any booked night? (b is checkout, exclusive)
 function crossesBooked(a, b) {
   let cur = new Date(a + 'T00:00:00');
   const end = new Date(b + 'T00:00:00');
@@ -366,7 +357,6 @@ function changeGuests(type, delta) {
   if (delta > 0 && total >= PRICING.maxGuests) { flashGuestMax(); return; }
   if (type === 'adults')   sel.adults   = Math.min(PRICING.maxGuests, Math.max(1, sel.adults + delta));
   if (type === 'children') sel.children = Math.min(PRICING.maxGuests - 1, Math.max(0, sel.children + delta));
-  // keep total within max
   while (sel.adults + sel.children > PRICING.maxGuests) {
     if (type === 'adults' && sel.children > 0) sel.children--; else break;
   }
@@ -380,10 +370,8 @@ function flashGuestMax() {
 
 function pickDate(dateStr) {
   if (!sel.checkin || (sel.checkin && sel.checkout)) {
-    // start a new selection
     sel.checkin = dateStr; sel.checkout = null;
   } else {
-    // selecting checkout
     if (dateStr <= sel.checkin) { sel.checkin = dateStr; sel.checkout = null; }
     else if (crossesBooked(sel.checkin, dateStr)) { sel.checkin = dateStr; sel.checkout = null; }
     else {
@@ -449,7 +437,6 @@ function buildAirbnbUrl() {
 
 function updateWizard() {
   const lang = currentLang();
-  // guest counts
   const ac = document.getElementById('adultsCount'); if (ac) ac.textContent = sel.adults;
   const cc = document.getElementById('childrenCount'); if (cc) cc.textContent = sel.children;
   const total = sel.adults + sel.children;
@@ -459,7 +446,6 @@ function updateWizard() {
   const am = document.getElementById('adultsMinus'); if (am) am.disabled = sel.adults <= 1;
   const cm = document.getElementById('childrenMinus'); if (cm) cm.disabled = sel.children <= 0;
 
-  // date displays
   const ci = document.getElementById('checkinDisplay');
   const co = document.getElementById('checkoutDisplay');
   if (ci) {
@@ -473,7 +459,6 @@ function updateWizard() {
   const reset = document.getElementById('dateReset');
   if (reset) reset.style.display = (sel.checkin || sel.checkout) ? 'block' : 'none';
 
-  // hint (skip if warning is showing)
   const hint = document.getElementById('dateHint');
   if (hint && !hint.dataset.warn) {
     hint.classList.remove('warn');
@@ -482,7 +467,6 @@ function updateWizard() {
     else { const n = nightsBetween(sel.checkin, sel.checkout); hint.innerHTML = `<span data-lang="nl">${n} ${n===1?'nacht':'nachten'} geselecteerd.</span><span data-lang="en">${n} ${n===1?'night':'nights'} selected.</span><span data-lang="pt">${n} ${n===1?'noite':'noites'} selecionadas.</span>`; }
   }
 
-  // price card
   const card = document.getElementById('priceCard');
   if (sel.checkin && sel.checkout) {
     const nights = nightsBetween(sel.checkin, sel.checkout);
@@ -500,11 +484,9 @@ function updateWizard() {
     card.classList.remove('show');
   }
 
-  // book button always reflects current selection/guests
   const btn = document.getElementById('wizardBookBtn');
   if (btn) btn.href = buildAirbnbUrl();
 
-  // live-sync dates/guests into contact form (hidden inputs + read-only recap)
   const guests = (sel.adults || 2) + (sel.children || 0);
   const fci = document.getElementById('formCheckin');
   const fco = document.getElementById('formCheckout');
@@ -560,7 +542,6 @@ const galleryPhotos = [
   {src:'https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mjc2MjU2MjQ%3D/original/9dc8be7c-61a6-4604-beb2-7e4346ea28d1.jpeg', nl:'Tuin met bomen', en:'Garden with trees', pt:'Jardim com árvores'},
 ];
 let currentPhoto = 0;
-// build thumbnails once
 (function buildThumbs(){
   const wrap = document.getElementById('lightboxThumbs');
   if (!wrap) return;
@@ -643,7 +624,6 @@ const lbEl = document.getElementById('lightbox');
 lbEl.addEventListener('click', function(e) {
   if (e.target === this) closeLightbox();
 });
-// swipe support
 let touchX = null;
 lbEl.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, {passive:true});
 lbEl.addEventListener('touchend', e => {
@@ -654,7 +634,6 @@ lbEl.addEventListener('touchend', e => {
 }, {passive:true});
 
 // ── CONTACT FORM ──
-// Vervang YOUR_FORM_ID met jouw Formspree formulier-ID (formspree.io → New Form → endpoint URL)
 const FORMSPREE_ID = 'mwvjyqrl';
 
 let _captchaA = 0, _captchaB = 0, _captchaAnswer = 0;
@@ -680,7 +659,6 @@ function updateContactCaptcha() {
   label.textContent = q[lang] || q.nl;
 }
 
-// Pre-fill dates/guests from booking wizard
 (function prefillContactForm() {
   try {
     const saved = JSON.parse(sessionStorage.getItem('cda_booking') || 'null');
@@ -707,7 +685,6 @@ genCaptcha();
     const feedback = document.getElementById('formFeedback');
     const submitBtn = form.querySelector('.submit-btn');
 
-    // Captcha check
     const captchaVal = parseInt(document.getElementById('captchaInput').value, 10);
     if (isNaN(captchaVal) || captchaVal !== _captchaAnswer) {
       feedback.textContent = lang==='nl' ? 'Verkeerd antwoord. Probeer het opnieuw.'
@@ -718,7 +695,6 @@ genCaptcha();
       return;
     }
 
-    // Collect values
     const aanhefSel = form.querySelector(`.aanhef-select[data-lang="${lang}"]`);
     const aanhef    = aanhefSel ? aanhefSel.value : '';
     const voornaam  = form.querySelector('[name="voornaam"]').value.trim();
@@ -730,11 +706,10 @@ genCaptcha();
     const personen  = form.querySelector('[name="personen"]').value;
     const bericht   = form.querySelector('[name="bericht"]').value.trim();
 
-    // Required field validation
     if (!voornaam || !achternaam || !email || !bericht) {
       feedback.textContent = lang==='nl' ? 'Vul alle verplichte velden (*) in.'
                            : lang==='en' ? 'Please fill in all required fields (*).'
-                           : 'Por favor preencha todos os campos obrigatórios (*).';
+                           : 'Por favor preencha todos os campos obrigatórios (*).'
       feedback.className = 'form-feedback error';
       return;
     }
@@ -789,6 +764,36 @@ genCaptcha();
       submitBtn.disabled = false;
       submitBtn.style.opacity = '';
     }
+  });
+})();
+
+// ── BEDROOM 3D TILT ──
+(function initBedroomTilt() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.querySelectorAll('.bedroom-card').forEach(card => {
+    card.addEventListener('mousemove', function(e) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const rY = ((x - cx) / cx) * 8;
+      const rX = -((y - cy) / cy) * 5;
+      card.style.transform = `perspective(1200px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.02,1.02,1.02)`;
+      card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+      card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+    });
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform 0.08s ease, box-shadow 0.4s ease, border-color 0.4s ease';
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease, border-color 0.4s ease';
+      card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+    });
   });
 })();
 
